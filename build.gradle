@@ -2,8 +2,9 @@
 
 buildscript {
     repositories {
-        jcenter()
-        google()
+        google()          // Google 官方库（
+        mavenCentral()    // 替代 jcenter() 的标准仓库
+        maven { url 'https://jitpack.io' } // CymChad 的库托管在 JitPack
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.1.2'
@@ -16,9 +17,9 @@ plugins {
 
 allprojects {
     repositories {
-        jcenter()
-        google()
-        maven { url "https://jitpack.io" }
+        google()          // Google 官方库（
+        mavenCentral()    // 替代 jcenter() 的标准仓库
+        maven { url 'https://jitpack.io' } // CymChad 的库托管在 JitPack
     }
 }
 
