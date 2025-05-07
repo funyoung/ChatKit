@@ -7,7 +7,7 @@ buildscript {
         maven { url 'https://jitpack.io' } // CymChad 的库托管在 JitPack
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.2.2'
+        classpath 'com.android.tools.build:gradle:7.0.0'
     }
 }
 
