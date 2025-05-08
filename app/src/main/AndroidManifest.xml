@@ -3,7 +3,44 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- If you are targeting apps above android version 6.0 to 12.0 You need to add this permission in your manifest -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+
+    <!-- Now if you are targeting app above android version 13.0 then you have to add this permission in your manifest.
+     It's upon you which type of files you want to access if you want access Audio, Images and Videos files then you have
+     to call all this below permissions -->
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
+
+    <!-- Now on android 11 and above if you want to access other file types like csv,doc,pdf etc...
+     You have to ask user a special permission that is MANAGE_EXTERNAL_STORAGE. But use this permission
+     at your own risk because if you are publishing app on google play-store then you can encounter some
+      issues. Use this permission only when your app core functionality is to read/write/delete. See the
+      below link for more reference on this permission-->
+    <!-- https://support.google.com/googleplay/android-developer/answer/10467955 -->
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
+
+    <!-- If you are targeting your app from android version 4.4 to the latest version of android then
+     you have to call all the above permissions as mentioned except MANAGE_EXTERNAL_STORAGE use it only
+      when needed.-->
+
+<!--    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"-->
+<!--        android:maxSdkVersion="32" />-->
+<!--    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"-->
+<!--        android:maxSdkVersion="32" />-->
+<!--    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO"/>-->
+<!--    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>-->
+<!--    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>-->
+<!--    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>-->
+
+    <!-- This attribute is "false" by default on apps targeting
+       Android 10 or higher. -->
     <application
+        android:requestLegacyExternalStorage="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/GreenTheme">
