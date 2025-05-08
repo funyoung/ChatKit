@@ -92,10 +92,9 @@
             android:name=".features.demo.def.DefaultDialogsActivity"
             android:theme="@style/BlueTheme" />
 
-        <activity android:name=".features.chat.holder.HiSirDialogsActivity" />
-        <activity android:name=".features.chat.holder.HiSirMessagesActivity" />
+        <activity android:name=".features.demo.markdown.MarkDownTestActivity" />
 
-        <activity android:name=".features.wiki.ChatMessagesActivity" />
+        <activity android:name=".features.chat.ChatMessagesActivity" />
         <activity android:name=".features.wiki.MyWikiActivity" />
         <activity android:name=".features.wiki.TeamWikiActivity" />
         <activity android:name=".features.wiki.PublicWikiActivity" />

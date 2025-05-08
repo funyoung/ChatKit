@@ -12,6 +12,7 @@ import com.stfalcon.chatkit.sample.R;
 import com.stfalcon.chatkit.sample.common.data.fixtures.DialogsFixtures;
 import com.stfalcon.chatkit.sample.common.data.model.Dialog;
 import com.stfalcon.chatkit.sample.common.data.model.Message;
+import com.stfalcon.chatkit.sample.features.chat.ChatMessagesActivity;
 import com.stfalcon.chatkit.sample.features.demo.DemoDialogsActivity;
 
 public class MyWikiActivity extends DemoDialogsActivity {

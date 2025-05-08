@@ -1,4 +1,4 @@
-package com.stfalcon.chatkit.sample.features.wiki;
+package com.stfalcon.chatkit.sample.features.chat;
 
 import static android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION;
 

@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 
 import com.stfalcon.chatkit.sample.features.main.MainActivity;
-import com.stfalcon.chatkit.sample.features.wiki.ChatMessagesActivity;
+import com.stfalcon.chatkit.sample.features.chat.ChatMessagesActivity;
 import com.stfalcon.chatkit.sample.features.wiki.MyWikiActivity;
 import com.stfalcon.chatkit.sample.features.wiki.PublicWikiActivity;
 import com.stfalcon.chatkit.sample.features.wiki.TeamWikiActivity;

@@ -11,6 +11,7 @@ import com.stfalcon.chatkit.dialogs.DialogsListAdapter;
 import com.stfalcon.chatkit.sample.R;
 import com.stfalcon.chatkit.sample.common.data.fixtures.DialogsFixtures;
 import com.stfalcon.chatkit.sample.common.data.model.Dialog;
+import com.stfalcon.chatkit.sample.features.chat.ChatMessagesActivity;
 import com.stfalcon.chatkit.sample.features.demo.DemoDialogsActivity;
 import com.stfalcon.chatkit.utils.DateFormatter;
 
