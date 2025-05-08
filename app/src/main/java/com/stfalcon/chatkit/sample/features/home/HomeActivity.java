@@ -60,12 +60,7 @@ public class HomeActivity extends AppCompatActivity {
                 if (R.id.hi_chat == id) {
                     showChat();
                 } else if (R.id.tv_person_search == id) {
-                    //startApk(MainActivity.this);
                     showPersonSearch();
-//                } else if (R.id.tv_person_auth == id) {
-//                    viewImage2();
-//                } else if (R.id.tv_person_compare == id) {
-//                    actionImage1();
                 } else if (R.id.tv_id_verify == id) {
                     showIdVerify();
                 } else if (R.id.tv_my_knowledge == id) {
@@ -125,56 +120,5 @@ public class HomeActivity extends AppCompatActivity {
 
     private void showPersonSearch() {
         dispatch(Schema.APP_PMOS, Schema.PMOS_FACE);
-    }
-
-    private void actionImage1() {
-        // 通过自定义 Action 发送 Intent
-        Intent intent = new Intent("com.example.ACTION1");
-        startActivity(intent);
-    }
-
-    private void actionImage2() {
-        // 通过自定义 Action 发送 Intent
-        Intent intent = new Intent("com.example.ACTION2");
-        startActivity(intent);
-    }
-
-
-    public static final String APP_PREFIX = "yourapp";
-    public static final String APP_DOMAIN = "example.com";
-    //    public static final String SCHEME = "yourapp://example.com/";
-    public static final String SCHEME = APP_PREFIX + "://" + APP_DOMAIN + "/";
-    public static Uri buildUri(String suffix) {
-        return Uri.parse(SCHEME + suffix);
-    }
-
-    private void viewImage1() {
-        // 通过 scheme 发送 Intent
-        Intent intent = new Intent(Intent.ACTION_VIEW, buildUri("page1"));
-        startActivity(intent);
-    }
-
-    private void viewImage2() {
-        // 通过 scheme 发送 Intent
-        Intent intent = new Intent(Intent.ACTION_VIEW, buildUri("page2"));
-        startActivity(intent);
-    }
-
-
-    private static String packageName = "com.fri.sonicom.pmospluss";
-//    private static String serviceName = "com.fri.sonicom.libraryfaceservice.second.service.PmosService";
-    public final static String wakeupActivityName = "com.fri.sonicom.libraryfaceservice.second.wakeup.WakeupActivity";
-    static public void startApk( Context ctx) {
-        ComponentName componetName = new ComponentName(
-                packageName,
-                wakeupActivityName );
-        Intent intent = new Intent();
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.setComponent(componetName);
-        try {
-            ctx.startActivity(intent);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }

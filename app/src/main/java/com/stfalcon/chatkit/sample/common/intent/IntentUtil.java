@@ -1,6 +1,8 @@
 package com.stfalcon.chatkit.sample.common.intent;
 
 import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
@@ -67,6 +69,7 @@ public class IntentUtil {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("yourapp://example.com/page1"));
         activity.startActivity(intent);
     }
+
     private static void startPmosIdVerify(Activity activity) {
         // 通过自定义 Action 发送 Intent
         Intent intent = new Intent("com.example.ACTION2");
@@ -136,5 +139,25 @@ public class IntentUtil {
             }
         }
         return result;
+    }
+
+    private static String pmosPackage = "com.fri.sonicom.pmospluss";
+    //    private static String serviceName = "com.fri.sonicom.libraryfaceservice.second.service.PmosService";
+    public final static String pmosWakeupActivity = "com.fri.sonicom.libraryfaceservice.second.wakeup.WakeupActivity";
+
+    static public void startPmosApk(Context ctx) {
+        startComponent(ctx, pmosPackage, pmosWakeupActivity);
+    }
+
+    static public void startComponent(Context ctx, String packageName, String activityName) {
+        ComponentName componentName = new ComponentName(packageName, activityName);
+        Intent intent = new Intent();
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setComponent(componentName);
+        try {
+            ctx.startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
