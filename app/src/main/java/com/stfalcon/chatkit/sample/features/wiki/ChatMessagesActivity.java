@@ -93,6 +93,15 @@ public class ChatMessagesActivity extends DemoMessagesActivity
         postHandleExtraMessage();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (null != filePickerDialog && filePickerDialog.isShowing()) {
+            filePickerDialog.dismiss();
+            extraMessagePending = null;
+        }
+    }
+
     private void preHandleExtraMessage(Intent intent) {
         extraMessagePending = intent.getStringExtra(EXTRA_MESSAGE);
     }
@@ -259,7 +268,7 @@ public class ChatMessagesActivity extends DemoMessagesActivity
         //If you want to view files of all extensions then pass null to properties.extensions
         properties.extensions = null;
         //If you want to view files with specific type of extensions the pass string array to properties.extensions
-        properties.extensions = new String[]{"zip","jpg","mp3","csv"};
+        properties.extensions = new String[]{"pdf","jpg","png","doc", "docx", "xls","xlsx", "ppt","pptx", "csv", "txt", "c", "java", "kt"};
         properties.show_hidden_files = false;
 
         FilePickerDialog dialog = new FilePickerDialog(this, properties);
@@ -268,16 +277,22 @@ public class ChatMessagesActivity extends DemoMessagesActivity
         dialog.setDialogSelectionListener(new DialogSelectionListener() {
             @Override
             public void onSelectedFilePaths(String[] files) {
-                //files is the array of the paths of files selected by the Application User.
-                Toast.makeText(ChatMessagesActivity.this, "已经选择文件数: " + files.length + String.join(", ", files), Toast.LENGTH_LONG).show();
+                if (null == files || files.length != 1) {
+                    //files is the array of the paths of files selected by the Application User.
+                    Toast.makeText(ChatMessagesActivity.this, "已经选择文件数: " + files.length + String.join(", ", files), Toast.LENGTH_LONG).show();
+                    return;
+                }
+                performOcr(files[0]);
             }
         });
 
         //dialog.show();
         filePickerDialog = dialog;
         checkPermissions();
+    }
 
-        Toast.makeText(this, "OCR识别图文功能即将上线，敬请期待。", Toast.LENGTH_SHORT).show();
+    private void performOcr(String file) {
+        Toast.makeText(this, "OCR识别图文功能即将上线，敬请期待。" + file, Toast.LENGTH_LONG).show();
     }
 
     @Override
