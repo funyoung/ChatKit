@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 29
+    compileSdk 34
     defaultConfig {
         applicationId "com.stfalcon.chatkit.sample"
         minSdkVersion 14
