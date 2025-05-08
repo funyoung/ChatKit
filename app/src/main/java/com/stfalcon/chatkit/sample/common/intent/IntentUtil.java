@@ -1,5 +1,8 @@
 package com.stfalcon.chatkit.sample.common.intent;
 
+import static com.stfalcon.chatkit.sample.common.intent.Schema.PMOS_ACTION_IDREAD;
+import static com.stfalcon.chatkit.sample.common.intent.Schema.PMOS_ACTION_LIVEFACE;
+
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -66,13 +69,15 @@ public class IntentUtil {
 
     // todo: 检查安装包，格式化启动intent.
     private static void startPmosFaceQuery(Activity activity) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("yourapp://example.com/page1"));
+//        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("yourapp://example.com/page1"));
+        Intent intent = new Intent(PMOS_ACTION_LIVEFACE);
         activity.startActivity(intent);
     }
 
     private static void startPmosIdVerify(Activity activity) {
         // 通过自定义 Action 发送 Intent
-        Intent intent = new Intent("com.example.ACTION2");
+//        Intent intent = new Intent("com.example.ACTION2");
+        Intent intent = new Intent(PMOS_ACTION_IDREAD);
         activity.startActivity(intent);
     }
 

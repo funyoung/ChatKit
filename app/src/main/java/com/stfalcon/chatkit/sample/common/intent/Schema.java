@@ -76,6 +76,12 @@ import java.util.Map;
 //Fragment处理：根据路径动态加载Fragment实现页面切换。
 
 public class Schema {
+    public static final String PATH_LIVEFACE = "LIVEFACE";
+    public static final String PMOS_ACTION_LIVEFACE = "com.fri.sonicom.pmospluss.ACTION.LIVEFACE";
+    private static final String PMOS_HOST = "pmospluss.sonicom.fri.com";
+
+    public static final String PMOS_ACTION_IDREAD = "com.fri.idcard.ACTION.IDREAD";
+
     // phos.fri.aiassistant
     public static final String APP_WIKI = "wiki";  // 知识库
     public static final String APP_PMOS = "pmos";  // 人像核验和身份证
