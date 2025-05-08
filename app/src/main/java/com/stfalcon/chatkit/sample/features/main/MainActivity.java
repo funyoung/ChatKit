@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import com.stfalcon.chatkit.sample.R;
-import com.stfalcon.chatkit.sample.features.chat.holder.HiSirMessagesActivity;
 import com.stfalcon.chatkit.sample.features.demo.custom.holder.CustomHolderDialogsActivity;
 import com.stfalcon.chatkit.sample.features.demo.custom.layout.CustomLayoutDialogsActivity;
 import com.stfalcon.chatkit.sample.features.demo.custom.media.CustomMediaMessagesActivity;

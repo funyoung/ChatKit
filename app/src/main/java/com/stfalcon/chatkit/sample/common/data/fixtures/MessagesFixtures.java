@@ -1,5 +1,6 @@
 package com.stfalcon.chatkit.sample.common.data.fixtures;
 
+import com.stfalcon.chatkit.sample.common.FileUtil;
 import com.stfalcon.chatkit.sample.common.data.model.Message;
 import com.stfalcon.chatkit.sample.common.data.model.User;
 
@@ -26,6 +27,19 @@ public final class MessagesFixtures extends FixturesData {
         message.setVoice(new Message.Voice("http://example.com", rnd.nextInt(200) + 30));
         return message;
     }
+
+    public static Message getFileMessage(String file) {
+        if (FileUtil.isImage(file)) {
+            return getImageMessage();
+        }
+
+        String fileName = FileUtil.getFileName(file);
+
+        Message message = new Message(getRandomId(), getUser(), null);
+        message.setVoice(new Message.Voice("http://example.com", rnd.nextInt(200) + 30));
+        return message;
+    }
+
 
     public static Message getTextMessage() {
         return getTextMessage(getRandomMessage());

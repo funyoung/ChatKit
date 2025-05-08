@@ -293,6 +293,7 @@ public class ChatMessagesActivity extends DemoMessagesActivity
 
     private void performOcr(String file) {
         Toast.makeText(this, "OCR识别图文功能即将上线，敬请期待。" + file, Toast.LENGTH_LONG).show();
+        messagesAdapter.addToStart(MessagesFixtures.getFileMessage(file), true);
     }
 
     @Override
@@ -323,7 +324,8 @@ public class ChatMessagesActivity extends DemoMessagesActivity
     public void onClick(DialogInterface dialogInterface, int i) {
         switch (i) {
             case 0:
-                messagesAdapter.addToStart(MessagesFixtures.getImageMessage(), true);
+                showFilePickerDialog();
+                //messagesAdapter.addToStart(MessagesFixtures.getImageMessage(), true);
                 break;
             case 1:
                 messagesAdapter.addToStart(MessagesFixtures.getVoiceMessage(), true);

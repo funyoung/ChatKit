@@ -19,6 +19,8 @@ public class Message implements IMessage,
     private Image image;
     private Voice voice;
 
+    private Doc doc;
+
     public Message(String id, User user, String text) {
         this(id, user, text, new Date());
     }
@@ -57,6 +59,10 @@ public class Message implements IMessage,
 
     public Voice getVoice() {
         return voice;
+    }
+
+    public Doc getDoc() {
+        return doc;
     }
 
     public String getStatus() {
@@ -104,6 +110,25 @@ public class Message implements IMessage,
 
         public int getDuration() {
             return duration;
+        }
+    }
+
+    public static class Doc {
+
+        private String url;
+        private String name;
+
+        public Doc(String url, String name) {
+            this.url = url;
+            this.name = name;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public String getName() {
+            return name;
         }
     }
 }
