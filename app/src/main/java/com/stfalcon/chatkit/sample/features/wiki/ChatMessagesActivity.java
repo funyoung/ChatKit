@@ -313,9 +313,9 @@ public class ChatMessagesActivity extends DemoMessagesActivity
     @Override
     public boolean hasContentFor(Message message, byte type) {
         if (type == CONTENT_TYPE_VOICE) {
-            return message.getVoice() != null
-                    && message.getVoice().getUrl() != null
-                    && !message.getVoice().getUrl().isEmpty();
+            return message.getDoc() != null
+                    && message.getDoc().getUrl() != null
+                    && !message.getDoc().getUrl().isEmpty();
         }
         return false;
     }

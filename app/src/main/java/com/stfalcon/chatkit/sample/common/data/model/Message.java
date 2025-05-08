@@ -17,9 +17,9 @@ public class Message implements IMessage,
     private Date createdAt;
     private User user;
     private Image image;
-    private Voice voice;
-
     private Doc doc;
+
+    private Document document;
 
     public Message(String id, User user, String text) {
         this(id, user, text, new Date());
@@ -57,12 +57,12 @@ public class Message implements IMessage,
         return image == null ? null : image.url;
     }
 
-    public Voice getVoice() {
-        return voice;
-    }
-
     public Doc getDoc() {
         return doc;
+    }
+
+    public Document getDocument() {
+        return document;
     }
 
     public String getStatus() {
@@ -81,8 +81,8 @@ public class Message implements IMessage,
         this.image = image;
     }
 
-    public void setVoice(Voice voice) {
-        this.voice = voice;
+    public void setDoc(Doc doc) {
+        this.doc = doc;
     }
 
     public static class Image {
@@ -94,31 +94,31 @@ public class Message implements IMessage,
         }
     }
 
-    public static class Voice {
-
-        private String url;
-        private int duration;
-
-        public Voice(String url, int duration) {
-            this.url = url;
-            this.duration = duration;
-        }
-
-        public String getUrl() {
-            return url;
-        }
-
-        public int getDuration() {
-            return duration;
-        }
-    }
-
     public static class Doc {
 
         private String url;
         private String name;
 
         public Doc(String url, String name) {
+            this.url = url;
+            this.name = name;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
+
+    public static class Document {
+
+        private String url;
+        private String name;
+
+        public Document(String url, String name) {
             this.url = url;
             this.name = name;
         }

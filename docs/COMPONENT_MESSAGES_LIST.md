@@ -391,11 +391,11 @@ MessageHolders holdersConfig = new MessageHolders()
 ```
 
 #### Custom content types
-We understand that ony images as media messages are often not enough. Therefore, we implemented the ability to add custom content types for displaying different types of content (geopoints, video, voice messages etc.).
+We understand that ony images as media messages are often not enough. Therefore, we implemented the ability to add custom content types for displaying different types of content (geopoints, video, doc messages etc.).
 
 To do this, you just need to implement the `MessageContentType` interface. However, you do not need to override any methods at his time. After that, you need to prepare your own layout files for displaying incoming and outcoming messages of this type, as well as ViewHolders (for binding data to view). And after that you can register them in the adapter via the `MessageHolders` object.
 
-For example, let's add support of voice messages:
+For example, let's add support of doc messages:
 ```java
 MessageHolders holders = new MessageHolders()
        .registerContentType(

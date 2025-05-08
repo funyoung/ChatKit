@@ -27,9 +27,10 @@ public class IncomingVoiceMessageViewHolder
     @Override
     public void onBind(Message message) {
         super.onBind(message);
-        tvDuration.setText(
-                FormatUtils.getDurationString(
-                        message.getVoice().getDuration()));
+//        tvDuration.setText(
+//                FormatUtils.getDurationString(
+//                        message.getDoc().getName()));
+        tvDuration.setText(message.getDoc().getName());
         tvTime.setText(DateFormatter.format(message.getCreatedAt(), DateFormatter.Template.TIME));
     }
 }

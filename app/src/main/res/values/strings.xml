@@ -13,7 +13,7 @@
     <string name="sample_title_holder">Custom view holder</string>
     <string name="sample_subtitle_holder">Custom view holder to extend default behaviour for a new features</string>
     <string name="sample_title_custom_content">Custom content type</string>
-    <string name="sample_subtitle_custom_content">Custom message content on the example of voice message</string>
+    <string name="sample_subtitle_custom_content">Custom message content on the example of doc message</string>
 
     <string name="hint_enter_a_message">Type a message…</string>
     <string name="on_log_click_message">Your custom long click handler</string>
@@ -26,7 +26,7 @@
 
     <string-array name="view_types_dialog">
         <item name="image">Image (default)</item>
-        <item name="voice">Voice message (custom)</item>
+        <item name="doc">Voice message (custom)</item>
     </string-array>
 
     <string name="start_typing_status">Start typing</string>

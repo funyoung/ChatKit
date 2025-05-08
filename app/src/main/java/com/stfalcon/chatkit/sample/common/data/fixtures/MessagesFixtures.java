@@ -24,19 +24,19 @@ public final class MessagesFixtures extends FixturesData {
 
     public static Message getVoiceMessage() {
         Message message = new Message(getRandomId(), getUser(), null);
-        message.setVoice(new Message.Voice("http://example.com", rnd.nextInt(200) + 30));
+        message.setDoc(new Message.Doc("http://example.com", String.valueOf(rnd.nextInt(200) + 30)));
         return message;
     }
 
     public static Message getFileMessage(String file) {
-        if (FileUtil.isImage(file)) {
-            return getImageMessage();
-        }
+//        if (FileUtil.isImage(file)) {
+//            return getImageMessage();
+//        }
 
         String fileName = FileUtil.getFileName(file);
 
         Message message = new Message(getRandomId(), getUser(), null);
-        message.setVoice(new Message.Voice("http://example.com", rnd.nextInt(200) + 30));
+        message.setDoc(new Message.Doc(file, fileName));
         return message;
     }
 
