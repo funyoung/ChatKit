@@ -19,6 +19,10 @@ public class MainActivityPagerAdapter extends FragmentStatePagerAdapter {
     public static final int ID_CUSTOM_VIEW_HOLDER = 3;
     public static final int ID_CUSTOM_CONTENT = 4;
 
+    public static final int ID_MARKDOWN = 5;
+
+    public static final int ID_COUNT = 6;
+
     private final Context context;
 
     public MainActivityPagerAdapter(Context context, FragmentManager fm) {
@@ -31,6 +35,10 @@ public class MainActivityPagerAdapter extends FragmentStatePagerAdapter {
         String title = null;
         String description = null;
         switch (position) {
+            case ID_MARKDOWN:
+                title = context.getString(R.string.sample_title_markdown);
+                description = context.getString(R.string.sample_subtitle_markdonw);
+                break;
             case ID_DEFAULT:
                 title = context.getString(R.string.sample_title_default);
                 description = context.getString(R.string.sample_subtitle_default);
@@ -57,6 +65,6 @@ public class MainActivityPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return 5;
+        return ID_COUNT;
     }
 }

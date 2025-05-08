@@ -12,6 +12,7 @@ import com.stfalcon.chatkit.sample.features.demo.custom.holder.CustomHolderDialo
 import com.stfalcon.chatkit.sample.features.demo.custom.layout.CustomLayoutDialogsActivity;
 import com.stfalcon.chatkit.sample.features.demo.custom.media.CustomMediaMessagesActivity;
 import com.stfalcon.chatkit.sample.features.demo.def.DefaultDialogsActivity;
+import com.stfalcon.chatkit.sample.features.demo.markdown.MarkDownTestActivity;
 import com.stfalcon.chatkit.sample.features.demo.styled.StyledDialogsActivity;
 import com.stfalcon.chatkit.sample.features.main.adapter.DemoCardFragment;
 import com.stfalcon.chatkit.sample.features.main.adapter.MainActivityPagerAdapter;
@@ -46,6 +47,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onAction(int id) {
         switch (id) {
+            case MainActivityPagerAdapter.ID_MARKDOWN:
+                MarkDownTestActivity.open(this);
+                break;
             case MainActivityPagerAdapter.ID_DEFAULT:
                 DefaultDialogsActivity.open(this);
                 break;

@@ -1,5 +1,7 @@
 package com.stfalcon.chatkit.sample.features.demo.markdown;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +15,10 @@ import io.noties.markwon.linkify.LinkifyPlugin;
 import io.noties.markwon.movement.MovementMethodPlugin;
 
 public class MarkDownTestActivity extends AppCompatActivity {
+
+    public static void open(Context context) {
+        context.startActivity(new Intent(context, MarkDownTestActivity.class));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

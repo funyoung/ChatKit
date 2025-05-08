@@ -34,5 +34,7 @@
     <string name="my_wiki">我的知识库</string>
     <string name="public_wiki">法律库</string>
     <string name="team_wiki">共享知识库</string>
+    <string name="sample_subtitle_markdonw">Dialogs with Markdown text shown</string>
+    <string name="sample_title_markdown">Markdown View</string>
 
 </resources>
