@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.StringRes;
+
 import com.stfalcon.chatkit.dialogs.DialogsList;
 import com.stfalcon.chatkit.dialogs.DialogsListAdapter;
 import com.stfalcon.chatkit.sample.R;
@@ -19,6 +21,11 @@ public class PublicWikiActivity extends DemoDialogsActivity {
     }
 
     private DialogsList dialogsList;
+
+    @Override
+    protected @StringRes int getTitleId() {
+        return R.string.public_wiki;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

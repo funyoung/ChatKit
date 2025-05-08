@@ -31,5 +31,8 @@
 
     <string name="start_typing_status">Start typing</string>
     <string name="stop_typing_status">Stop typing</string>
+    <string name="my_wiki">我的知识库</string>
+    <string name="public_wiki">法律库</string>
+    <string name="team_wiki">共享知识库</string>
 
 </resources>
