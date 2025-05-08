@@ -131,6 +131,15 @@ public class MessageInput extends RelativeLayout
         }
     }
 
+    private boolean muted = false;
+    public void setMute(boolean mute) {
+        this.muted = mute;
+        if (mute) {
+            messageSendButton.setEnabled(false);
+        } else {
+            messageSendButton.setEnabled(input.length() > 0);
+        }
+    }
     /**
      * This method is called to notify you that, within s,
      * the count characters beginning at start have just replaced old text that had length before
@@ -138,7 +147,7 @@ public class MessageInput extends RelativeLayout
     @Override
     public void onTextChanged(CharSequence s, int start, int count, int after) {
         input = s;
-        messageSendButton.setEnabled(input.length() > 0);
+        messageSendButton.setEnabled(!muted && input.length() > 0);
         if (s.length() > 0) {
             if (!isTyping) {
                 isTyping = true;

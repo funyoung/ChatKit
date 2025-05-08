@@ -64,6 +64,7 @@ public class ChatMessagesActivity extends DemoMessagesActivity
     }
 
     private MessagesList messagesList;
+    private MessageInput input;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +74,7 @@ public class ChatMessagesActivity extends DemoMessagesActivity
         this.messagesList = findViewById(R.id.messagesList);
         initAdapter();
 
-        MessageInput input = findViewById(R.id.input);
+        input = findViewById(R.id.input);
         input.setInputListener(this);
         input.setAttachmentsListener(this);
 
@@ -115,6 +116,8 @@ public class ChatMessagesActivity extends DemoMessagesActivity
         } else {
             // nothing need to do.
         }
+
+        input.setMute(false);
         extraMessagePending = null;
     }
 
@@ -294,6 +297,14 @@ public class ChatMessagesActivity extends DemoMessagesActivity
     private void performOcr(String file) {
         Toast.makeText(this, "OCR识别图文功能即将上线，敬请期待。" + file, Toast.LENGTH_LONG).show();
         messagesAdapter.addToStart(MessagesFixtures.getFileMessage(file), true);
+        // TODO: 上传文件并等待ocr结果。
+        input.setMute(true);
+        input.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                input.setMute(false);
+            }
+        }, 3000);
     }
 
     @Override
