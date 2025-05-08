@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdk 34
     defaultConfig {
-        applicationId "com.stfalcon.chatkit.sample"
+        applicationId "phos.fri.aiassistant"
         minSdkVersion 14
         versionCode 1
         versionName "1.0"

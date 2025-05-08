@@ -9,7 +9,8 @@
         android:theme="@style/GreenTheme">
 
         <activity
-            android:name=".features.main.MainActivity"
+            android:name=".features.home.HomeActivity"
+            android:exported="true"
             android:theme="@style/BlueThemeNoActionBar">
 
             <intent-filter>
@@ -19,12 +20,18 @@
 
         </activity>
 
+        <activity android:name=".features.main.MainActivity" />
+
         <activity
             android:name=".features.demo.def.DefaultMessagesActivity"
             android:theme="@style/BlueTheme" />
         <activity
             android:name=".features.demo.def.DefaultDialogsActivity"
             android:theme="@style/BlueTheme" />
+
+        <activity android:name=".features.chat.holder.HiSirDialogsActivity" />
+        <activity android:name=".features.chat.holder.HiSirMessagesActivity" />
+
         <activity android:name=".features.demo.styled.StyledMessagesActivity" />
         <activity android:name=".features.demo.styled.StyledDialogsActivity" />
         <activity android:name=".features.demo.custom.layout.CustomLayoutDialogsActivity" />
