@@ -2,29 +2,23 @@ package com.stfalcon.chatkit.sample.features.wiki;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 
 import androidx.annotation.StringRes;
 
-import com.stfalcon.chatkit.dialogs.DialogsList;
-import com.stfalcon.chatkit.dialogs.DialogsListAdapter;
 import com.stfalcon.chatkit.sample.R;
 import com.stfalcon.chatkit.sample.common.data.fixtures.DialogsFixtures;
 import com.stfalcon.chatkit.sample.common.data.model.Dialog;
-import com.stfalcon.chatkit.sample.features.chat.ChatMessagesActivity;
-import com.stfalcon.chatkit.sample.features.demo.DemoDialogsActivity;
 import com.stfalcon.chatkit.utils.DateFormatter;
 
 import java.util.Date;
+import java.util.List;
 
-public class TeamWikiActivity extends DemoDialogsActivity
+public class TeamWikiActivity extends AbstractWikiActivity
         implements DateFormatter.Formatter {
 
     public static void open(Context context) {
         context.startActivity(new Intent(context, TeamWikiActivity.class));
     }
-
-    private DialogsList dialogsList;
 
     @Override
     protected @StringRes int getTitleId() {
@@ -32,17 +26,8 @@ public class TeamWikiActivity extends DemoDialogsActivity
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_styled_dialogs);
-
-        dialogsList = findViewById(R.id.dialogsList);
-        initAdapter();
-    }
-
-    @Override
-    public void onDialogClick(Dialog dialog) {
-        ChatMessagesActivity.open(this);
+    protected List<Dialog> getDialogs() {
+        return DialogsFixtures.getDialogs();
     }
 
     @Override
@@ -56,16 +41,5 @@ public class TeamWikiActivity extends DemoDialogsActivity
         } else {
             return DateFormatter.format(date, DateFormatter.Template.STRING_DAY_MONTH_YEAR);
         }
-    }
-
-    private void initAdapter() {
-        super.dialogsAdapter = new DialogsListAdapter<>(super.imageLoader);
-        super.dialogsAdapter.setItems(DialogsFixtures.getDialogs());
-
-        super.dialogsAdapter.setOnDialogClickListener(this);
-        super.dialogsAdapter.setOnDialogLongClickListener(this);
-        super.dialogsAdapter.setDatesFormatter(this);
-
-        dialogsList.setAdapter(super.dialogsAdapter);
     }
 }
