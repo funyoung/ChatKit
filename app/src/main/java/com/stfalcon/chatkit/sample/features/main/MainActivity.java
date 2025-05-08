@@ -1,11 +1,14 @@
 package com.stfalcon.chatkit.sample.features.main;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import com.stfalcon.chatkit.sample.R;
+import com.stfalcon.chatkit.sample.features.chat.holder.HiSirMessagesActivity;
 import com.stfalcon.chatkit.sample.features.demo.custom.holder.CustomHolderDialogsActivity;
 import com.stfalcon.chatkit.sample.features.demo.custom.layout.CustomLayoutDialogsActivity;
 import com.stfalcon.chatkit.sample.features.demo.custom.media.CustomMediaMessagesActivity;
@@ -21,6 +24,10 @@ import me.relex.circleindicator.CircleIndicator;
  */
 public class MainActivity extends AppCompatActivity
         implements DemoCardFragment.OnActionListener {
+
+    public static void open(Context context) {
+        context.startActivity(new Intent(context, MainActivity.class));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

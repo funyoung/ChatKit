@@ -11,13 +11,39 @@
         <activity
             android:name=".features.home.HomeActivity"
             android:exported="true"
+            android:launchMode="singleTop"
             android:theme="@style/BlueThemeNoActionBar">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
+            <!-- 接收pmos的人像和身份证核验intent -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- 定义URI scheme和host -->
+                <data android:scheme="pmos" android:host="aiassistant.fri.phos" />
+            </intent-filter>
+
+            <!-- 接收wiki知识库的对话intent -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- 定义URI scheme和host -->
+                <data android:scheme="wiki" android:host="aiassistant.fri.phos" />
+            </intent-filter>
+
+            <!-- 接收原子服务工具的intent -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- 定义URI scheme和host -->
+                <data android:scheme="tool" android:host="aiassistant.fri.phos" />
+            </intent-filter>
         </activity>
 
         <activity android:name=".features.main.MainActivity" />
