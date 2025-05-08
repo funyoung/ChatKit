@@ -23,6 +23,7 @@ public class HomeActivity extends AppCompatActivity {
         handleIntent(getIntent());
 
         // 为功能按钮设置点击事件
+        setFeatureButtonClickListener(R.id.hi_chat, "点我聊天");
         setFeatureButtonClickListener(R.id.tv_person_search, "人像查询");
         setFeatureButtonClickListener(R.id.tv_id_verify, "证件核查");
         setFeatureButtonClickListener(R.id.tv_my_knowledge, "我的知识库");
@@ -56,7 +57,9 @@ public class HomeActivity extends AppCompatActivity {
                 // 这里可以添加跳转到对应功能页面的代码
                 System.out.println("Clicked on " + featureName);
                 int id = v.getId();
-                if (R.id.tv_person_search == id) {
+                if (R.id.hi_chat == id) {
+                    showChat();
+                } else if (R.id.tv_person_search == id) {
                     //startApk(MainActivity.this);
                     showPersonSearch();
 //                } else if (R.id.tv_person_auth == id) {
@@ -98,6 +101,10 @@ public class HomeActivity extends AppCompatActivity {
 
     private void showOcr() {
         dispatch(Schema.APP_TOOL, Schema.TOOL_OCR);
+    }
+
+    private void showChat() {
+        dispatch(Schema.APP_WIKI, Schema.WIKI_CHAT);
     }
 
     private void showLawConsult() {

@@ -58,6 +58,11 @@
         <activity android:name=".features.chat.holder.HiSirDialogsActivity" />
         <activity android:name=".features.chat.holder.HiSirMessagesActivity" />
 
+        <activity android:name=".features.wiki.ChatMessagesActivity" />
+        <activity android:name=".features.wiki.MyWikiActivity" />
+        <activity android:name=".features.wiki.TeamWikiActivity" />
+        <activity android:name=".features.wiki.PublicWikiActivity" />
+
         <activity android:name=".features.demo.styled.StyledMessagesActivity" />
         <activity android:name=".features.demo.styled.StyledDialogsActivity" />
         <activity android:name=".features.demo.custom.layout.CustomLayoutDialogsActivity" />

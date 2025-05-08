@@ -3,10 +3,12 @@ package com.stfalcon.chatkit.sample.common.intent;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
-import android.text.TextUtils;
 
-import com.stfalcon.chatkit.sample.features.chat.holder.HiSirMessagesActivity;
 import com.stfalcon.chatkit.sample.features.main.MainActivity;
+import com.stfalcon.chatkit.sample.features.wiki.ChatMessagesActivity;
+import com.stfalcon.chatkit.sample.features.wiki.MyWikiActivity;
+import com.stfalcon.chatkit.sample.features.wiki.PublicWikiActivity;
+import com.stfalcon.chatkit.sample.features.wiki.TeamWikiActivity;
 
 import java.util.List;
 
@@ -66,11 +68,9 @@ public class IntentUtil {
             switch (path) {
                 case Schema.PMOS_FACE:
                     // 跳转到页面1
-
                     break;
                 case Schema.PMOS_ID:
                     // 跳转到页面2或加载Fragment
-
                     break;
                 default:
                     // 处理未知路径或默认页
@@ -85,20 +85,17 @@ public class IntentUtil {
         if (path != null) {
             switch (path) {
                 case Schema.WIKI_CHAT:
-                    HiSirMessagesActivity.open(activity);
+                    ChatMessagesActivity.open(activity);
                     result = true;
                     break;
                 case Schema.WIKI_MINE:
-                    // 跳转到页面2或加载Fragment
-
+                    MyWikiActivity.open(activity);
                     break;
                 case Schema.WIKI_TEAM:
-                    // 跳转到页面1
-
+                    TeamWikiActivity.open(activity);
                     break;
                 case Schema.WIKI_PUBLIC:
-                    // 跳转到页面2或加载Fragment
-
+                    PublicWikiActivity.open(activity);
                     break;
                 default:
                     // 处理未知路径或默认页
