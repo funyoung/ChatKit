@@ -62,15 +62,26 @@ public class IntentUtil {
         return false;
     }
 
+    // todo: 检查安装包，格式化启动intent.
+    private static void startPmosFaceQuery(Activity activity) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("yourapp://example.com/page1"));
+        activity.startActivity(intent);
+    }
+    private static void startPmosIdVerify(Activity activity) {
+        // 通过自定义 Action 发送 Intent
+        Intent intent = new Intent("com.example.ACTION2");
+        activity.startActivity(intent);
+    }
+
     public static boolean handlePmosIntent(Activity activity, String path) {
         boolean result = false;
         if (path != null) {
             switch (path) {
                 case Schema.PMOS_FACE:
-                    // 跳转到页面1
+                    startPmosFaceQuery(activity);
                     break;
                 case Schema.PMOS_ID:
-                    // 跳转到页面2或加载Fragment
+                    startPmosIdVerify(activity);
                     break;
                 default:
                     // 处理未知路径或默认页
@@ -110,8 +121,10 @@ public class IntentUtil {
         if (path != null) {
             switch (path) {
                 case Schema.TOOL_OCR:
+                    ChatMessagesActivity.openOcr(activity);
                     break;
                 case Schema.TOOL_TTS:
+                    ChatMessagesActivity.openTts(activity);
                     break;
                 case Schema.TOOL_MORE:
                     MainActivity.open(activity);
