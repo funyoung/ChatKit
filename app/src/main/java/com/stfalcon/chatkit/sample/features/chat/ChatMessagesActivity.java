@@ -22,6 +22,7 @@ import com.developer.filepicker.controller.DialogSelectionListener;
 import com.developer.filepicker.model.DialogConfigs;
 import com.developer.filepicker.model.DialogProperties;
 import com.developer.filepicker.view.FilePickerDialog;
+import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.stfalcon.chatkit.messages.MessageHolders;
 import com.stfalcon.chatkit.messages.MessageInput;
@@ -119,6 +120,40 @@ public class ChatMessagesActivity extends DemoMessagesActivity
                     }
                 });
     }
+    private void loadChatListEx() {
+        api.getChatList(userId, datasetId).subscribeOn(Schedulers.io())
+                .compose(RxUtils.handleResponse())          // 业务 code 过滤
+                .compose(RxUtils.applySchedulers())         // 线程切换
+                .subscribe(new Observer<ChatListData>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        // 显示 loading
+                    }
+                    @Override
+                    public void onNext(ChatListData data) {
+                        // 更新 UI：data.getDataList()
+                        String msg = new Gson().toJson(data);
+                        Toast.makeText(ChatMessagesActivity.this, msg, Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onError(Throwable e) {
+                        // 隐藏 loading
+                        if (e instanceof IOException) {
+                            // 网络错误提示
+                        } else if (e instanceof JsonParseException) {
+                            // 解析错误提示
+                        } else if (e instanceof ApiException) {
+                            // 业务错误提示：((ApiException)e).getMessage()
+                        } else {
+                            // 其他错误
+                        }
+                    }
+                    @Override
+                    public void onComplete() {
+                        // 隐藏 loading
+                    }
+                });
+    }
 
     private void showError(Throwable e) {
         Toast.makeText(this, "Exception: " + e.getMessage(), Toast.LENGTH_LONG).show();
@@ -151,7 +186,8 @@ public class ChatMessagesActivity extends DemoMessagesActivity
         super.onResume();
         postHandleExtraMessage();
 
-        loadChatList();
+//        loadChatList();
+        loadChatListEx();
     }
 
     @Override
