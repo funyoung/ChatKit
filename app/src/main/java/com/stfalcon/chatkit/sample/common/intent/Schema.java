@@ -77,8 +77,7 @@ import java.util.Map;
 
 public class Schema {
     public static final String PMOS_ACTION_LIVEFACE = "phos.fri.aiassistant.ACTION.FACE_QUERY";
-
-    public static final String PMOS_ACTION_IDREAD = "com.fri.idcard.ACTION.IDREAD";
+    public static final String PMOS_ACTION_IDREAD = "phos.fri.aiassistant.ACTION.ID_READ";
 
     // phos.fri.aiassistant
     public static final String APP_WIKI = "wiki";  // 知识库
