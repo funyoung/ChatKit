@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- 全局基准：不允许明文通信 -->
+    <base-config cleartextTrafficPermitted="true" />
+
+    <!-- 针对指定 IP 允许明文 -->
+    <domain-config cleartextTrafficPermitted="true">
+        <!-- 注意：依据 Android 文档，这里的 domain 可填写主机名或 IP -->
+        <domain includeSubdomains="true">192.168.132.104</domain>
+    </domain-config>
+</network-security-config>
