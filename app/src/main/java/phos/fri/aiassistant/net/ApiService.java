@@ -6,6 +6,7 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import phos.fri.aiassistant.entity.ApiResponse;
 import phos.fri.aiassistant.entity.AssignListData;
+import phos.fri.aiassistant.entity.ChatCompletionRequest;
 import phos.fri.aiassistant.entity.ChatListData;
 import phos.fri.aiassistant.entity.CreateChatRequest;
 import phos.fri.aiassistant.entity.NewChatData;
@@ -15,22 +16,23 @@ import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.Streaming;
 
 /**
  * @author
- * 二类区总线服务访问。
  */
 public interface ApiService {
-
 //    String CONTENT_TYPE = "Content-Type: application/octet-stream";
     String CONTENT_TYPE = "Content-Type: application/json";
 
+    @Headers(CONTENT_TYPE)
     @GET("chat/list/{userId}/{datasetId}")
     Observable<ApiResponse<ChatListData>> getChatList(
             @Path("userId") String userId,
             @Path("datasetId") String datasetId
     );
 
+    @Headers(CONTENT_TYPE)
     @GET("assign/list/user/{userId}")
     Observable<ApiResponse<AssignListData>> getUserAssignmentList(
             @Path("userId") String userId,
@@ -38,6 +40,7 @@ public interface ApiService {
             @Query("pageSize") int pageSize
     );
 
+    @Headers(CONTENT_TYPE)
     @GET("assign/list/team/{teamId}")
     Observable<ApiResponse<AssignListData>> getTeamAssignmentList(
             @Path("teamId") String teamId,
@@ -45,45 +48,29 @@ public interface ApiService {
             @Query("pageSize") int pageSize
     );
 
+    @Headers(CONTENT_TYPE)
     @POST("ai/create/api/v1/chats")
     Observable<ApiResponse<NewChatData>> createChat(@Body CreateChatRequest request);
 
 
-    @POST("/ai/api/v1/chats_openai/{chatId}/chat/completions")
-    Observable<ApiResponse<NewChatData>> chatCompletion(@Body CreateChatRequest request);
+//    @POST("/ai/api/v1/chats_openai/{chatId}/chat/completions")
+//    Observable<ApiResponse<NewChatData>> chatCompletion(@Body CreateChatRequest request);
 
-    @Headers(CONTENT_TYPE)
-    @POST("portrait-api/gwface/terimnalAuth")
-    Observable<ResponseBody> getZjMy(@Body RequestBody bytes);
-
-    @Headers(CONTENT_TYPE)
-    @POST("portrait-api/gwface/auth")
-    Observable<ResponseBody> faceAuth(@Body RequestBody bytes);
-
-
-    @Headers(CONTENT_TYPE)
-    @POST("portrait-api/gwface/authOneToOne")
-    Observable<ResponseBody> faceCompare(@Body RequestBody bytes);
-
-    @Headers(CONTENT_TYPE)
-    //@POST("prod-api/service-authfaces/face/query")
-    @POST("portrait-api/gwface/query")
-    Observable<ResponseBody> faceQuery(@Body RequestBody bytes);
-
-
-
-    @Headers(CONTENT_TYPE)
-    //@POST("prod-api/service-authfaces/face/query")
-    @POST("portrait-api/gw/getAppInfo")
-    Observable<ResponseBody> queryAppInfo(@Body RequestBody bytes);
-
-    //身份证号在用户白名单里，同时imei在设备白名单里才能登录。上海现在都没管。
-    @Headers(CONTENT_TYPE)
-    @POST("portrait-api/gw/appLogin")
-    Observable<ResponseBody> appLogin(@Body RequestBody bytes);
-
-    @Headers(CONTENT_TYPE)
-    @POST("portrait-api/gw/isAlive")
-    Observable<ResponseBody> noAliveJudge(@Body RequestBody bytes);
-
+    /**
+     * 调用 OpenAI 风格的流式聊天完成接口
+     *
+     * @param chatId  路径中的聊天会话等标识
+     * @param request    请求体，会以 JSON 发送
+     * @return           ResponseBody，可通过流方式逐行读取 SSE 事件
+     */
+    @Streaming
+    @Headers({
+            "accept: text/event-stream;charset=UTF-8",
+            "Content-Type: application/json"
+    })
+    @POST("ai/api/v1/chats_openai/{chatId}/chat/completions")
+    Observable<ApiResponse<String>> streamChatCompletions(
+            @Path("chatId") String chatId,
+            @Body ChatCompletionRequest request
+    );
 }
