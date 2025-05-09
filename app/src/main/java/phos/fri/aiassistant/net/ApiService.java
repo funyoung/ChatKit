@@ -7,6 +7,8 @@ import okhttp3.ResponseBody;
 import phos.fri.aiassistant.entity.ApiResponse;
 import phos.fri.aiassistant.entity.AssignListData;
 import phos.fri.aiassistant.entity.ChatListData;
+import phos.fri.aiassistant.entity.CreateChatRequest;
+import phos.fri.aiassistant.entity.NewChatData;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
@@ -42,6 +44,13 @@ public interface ApiService {
             @Query("pageNo") int pageNo,
             @Query("pageSize") int pageSize
     );
+
+    @POST("ai/create/api/v1/chats")
+    Observable<ApiResponse<NewChatData>> createChat(@Body CreateChatRequest request);
+
+
+    @POST("/ai/api/v1/chats_openai/{chatId}/chat/completions")
+    Observable<ApiResponse<NewChatData>> chatCompletion(@Body CreateChatRequest request);
 
     @Headers(CONTENT_TYPE)
     @POST("portrait-api/gwface/terimnalAuth")
