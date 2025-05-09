@@ -505,28 +505,27 @@ public class WikiListAdapter
 
     public static class DialogViewHolder extends BaseDialogViewHolder {
         protected ViewGroup container;
-        protected ViewGroup root;
+//        protected ViewGroup root;
         protected TextView tvName;
         protected TextView tvDate;
-        protected ImageView ivAvatar;
-        protected ImageView ivLastMessageUser;
+//        protected ImageView ivAvatar;
+//        protected ImageView ivLastMessageUser;
         protected TextView tvLastMessage;
-        protected TextView tvBubble;
-        protected ViewGroup dividerContainer;
-        protected View divider;
+//        protected TextView tvBubble;
+//        protected ViewGroup dividerContainer;
+//        protected View divider;
 
         public DialogViewHolder(View itemView) {
             super(itemView);
-            root = itemView.findViewById(R.id.dialogRootLayout);
-            container = itemView.findViewById(R.id.dialogContainer);
+            container = itemView.findViewById(R.id.dialogRootLayout);
             tvName = itemView.findViewById(R.id.dialogName);
             tvDate = itemView.findViewById(R.id.dialogDate);
             tvLastMessage = itemView.findViewById(R.id.dialogLastMessage);
-            tvBubble = itemView.findViewById(R.id.dialogUnreadBubble);
-            ivLastMessageUser = itemView.findViewById(R.id.dialogLastMessageUserAvatar);
-            ivAvatar = itemView.findViewById(R.id.dialogAvatar);
-            dividerContainer = itemView.findViewById(R.id.dialogDividerContainer);
-            divider = itemView.findViewById(R.id.dialogDivider);
+//            tvBubble = itemView.findViewById(R.id.dialogUnreadBubble);
+//            ivLastMessageUser = itemView.findViewById(R.id.dialogLastMessageUserAvatar);
+//            ivAvatar = itemView.findViewById(R.id.dialogAvatar);
+//            dividerContainer = itemView.findViewById(R.id.dialogDividerContainer);
+//            divider = itemView.findViewById(R.id.dialogDivider);
 
         }
 

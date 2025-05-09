@@ -125,7 +125,7 @@ public abstract class BaseWikiActivity extends AppCompatActivity
     }
 
     private void initAdapter() {
-        wikiAdapter = new WikiListAdapter(R.layout.item_custom_dialog, imageLoader);
+        wikiAdapter = new WikiListAdapter(R.layout.item_wiki, imageLoader);
         wikiAdapter.setOnDialogClickListener(this);
         wikiAdapter.setOnDialogLongClickListener(this);
         wikiList.setAdapter(wikiAdapter);
