@@ -36,17 +36,13 @@ import com.stfalcon.chatkit.sample.common.intent.Schema;
 import com.stfalcon.chatkit.sample.features.demo.DemoMessagesActivity;
 import com.stfalcon.chatkit.sample.features.demo.custom.media.holders.IncomingVoiceMessageViewHolder;
 import com.stfalcon.chatkit.sample.features.demo.custom.media.holders.OutcomingVoiceMessageViewHolder;
-import com.stfalcon.chatkit.sample.features.wiki.AbstractWikiActivity;
 
 import java.io.File;
 import java.io.IOException;
 
 import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import phos.fri.aiassistant.entity.ApiResponse;
-import phos.fri.aiassistant.entity.AssignListData;
 import phos.fri.aiassistant.entity.ChatListData;
 import phos.fri.aiassistant.net.ApiClient;
 import phos.fri.aiassistant.entity.ApiException;

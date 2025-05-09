@@ -18,5 +18,44 @@ public class DatasetItem {
     @SerializedName("createTime")
     private String createTime;
 
-    // Getters
+    public String getOid() {
+        return oid;
+    }
+
+    public String getDatasetId() {
+        return datasetId;
+    }
+
+    public String getDatasetName() {
+        return datasetName;
+    }
+
+    public String getDatasetDesc() {
+        return datasetDesc;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    // Setters
+    public void setOid(String oid) {
+        this.oid = oid;
+    }
+
+    public void setDatasetId(String datasetId) {
+        this.datasetId = datasetId;
+    }
+
+    public void setDatasetName(String datasetName) {
+        this.datasetName = datasetName;
+    }
+
+    public void setDatasetDesc(String datasetDesc) {
+        this.datasetDesc = datasetDesc;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
 }

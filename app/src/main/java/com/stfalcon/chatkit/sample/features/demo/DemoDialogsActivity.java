@@ -3,7 +3,6 @@ package com.stfalcon.chatkit.sample.features.demo;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.squareup.picasso.Picasso;
@@ -22,29 +21,11 @@ public abstract class DemoDialogsActivity extends AppCompatActivity
     protected ImageLoader imageLoader;
     protected DialogsListAdapter<Dialog> dialogsAdapter;
 
-    protected String getTitleStr() {
-        return null;
-    }
-
-    protected  @StringRes int getTitleId() {
-        return 0;
-    }
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         imageLoader = (imageView, url, payload) -> Picasso.get().load(url).into(imageView);
-
-        String title = getTitleStr();
-        if (null != title) {
-            setTitle(title);
-        }
-
-        int titleId = getTitleId();
-        if (titleId != 0) {
-            setTitle(titleId);
-        }
     }
 
     @Override

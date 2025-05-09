@@ -28,7 +28,7 @@ import com.stfalcon.chatkit.commons.Style;
  * Style for DialogList customization by xml attributes
  */
 @SuppressWarnings("WeakerAccess")
-class DialogListStyle extends Style {
+public class DialogListStyle extends Style {
 
     private int dialogTitleTextColor;
     private int dialogTitleTextSize;
@@ -69,7 +69,7 @@ class DialogListStyle extends Style {
     private int dialogItemBackground;
     private int dialogUnreadItemBackground;
 
-    static DialogListStyle parse(Context context, AttributeSet attrs) {
+    public static DialogListStyle parse(Context context, AttributeSet attrs) {
         DialogListStyle style = new DialogListStyle(context, attrs);
 
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.DialogsList);

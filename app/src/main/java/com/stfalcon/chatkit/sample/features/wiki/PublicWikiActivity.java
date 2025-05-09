@@ -6,12 +6,8 @@ import android.content.Intent;
 import androidx.annotation.StringRes;
 
 import com.stfalcon.chatkit.sample.R;
-import com.stfalcon.chatkit.sample.common.data.fixtures.DialogsFixtures;
-import com.stfalcon.chatkit.sample.common.data.model.Dialog;
 
-import java.util.List;
-
-public class PublicWikiActivity extends AbstractWikiActivity {
+public class PublicWikiActivity extends BaseWikiActivity {
 
     public static void open(Context context) {
         context.startActivity(new Intent(context, PublicWikiActivity.class));
@@ -22,10 +18,10 @@ public class PublicWikiActivity extends AbstractWikiActivity {
         return R.string.public_wiki;
     }
 
-    @Override
-    protected List<Dialog> getDialogs() {
-        return DialogsFixtures.getDialogs();
-    }
+//    @Override
+//    protected List<Dialog> getDialogs() {
+//        return DialogsFixtures.getDialogs();
+//    }
 
     @Override
     protected String getUserId() {

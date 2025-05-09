@@ -3,14 +3,16 @@ package com.stfalcon.chatkit.sample.features.wiki;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
-import com.stfalcon.chatkit.dialogs.DialogsList;
-import com.stfalcon.chatkit.dialogs.DialogsListAdapter;
+import com.squareup.picasso.Picasso;
+import com.stfalcon.chatkit.commons.ImageLoader;
 import com.stfalcon.chatkit.sample.R;
-import com.stfalcon.chatkit.sample.common.data.model.Dialog;
 import com.stfalcon.chatkit.sample.features.chat.ChatMessagesActivity;
-import com.stfalcon.chatkit.sample.features.demo.DemoDialogsActivity;
+import com.stfalcon.chatkit.sample.utils.AppUtils;
 
 import java.io.IOException;
 import java.util.List;
@@ -20,24 +22,36 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import phos.fri.aiassistant.entity.ApiException;
 import phos.fri.aiassistant.entity.AssignListData;
-import phos.fri.aiassistant.entity.ChatListData;
+import phos.fri.aiassistant.entity.DatasetItem;
 import phos.fri.aiassistant.net.ApiClient;
 import phos.fri.aiassistant.net.ApiService;
 import phos.fri.aiassistant.net.RxUtils;
 import phos.fri.aiassistant.settings.Profile;
 
-public abstract class AbstractWikiActivity extends DemoDialogsActivity {
-    private DialogsList dialogsList;
+public abstract class BaseWikiActivity extends AppCompatActivity
+        implements WikiListAdapter.OnDialogClickListener,
+        WikiListAdapter.OnDialogLongClickListener {
 
-    protected abstract List<Dialog> getDialogs();
+    protected ImageLoader imageLoader;
+    private WikiList wikiList;
+    protected WikiListAdapter wikiAdapter;
+
     protected abstract String getUserId();
 
     private ApiService api = ApiClient.getApiService();
 
+    protected String getTitleStr() {
+        return null;
+    }
+
+    protected  @StringRes int getTitleId() {
+        return 0;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_custom_layout_dialogs);
+        setContentView(R.layout.activity_wiki_list);
 
         String userId = getUserId();
         if (null == userId) {
@@ -47,7 +61,20 @@ public abstract class AbstractWikiActivity extends DemoDialogsActivity {
             return;
         }
 
-        dialogsList = findViewById(R.id.dialogsList);
+
+        imageLoader = (imageView, url, payload) -> Picasso.get().load(url).into(imageView);
+
+        String title = getTitleStr();
+        if (null != title) {
+            setTitle(title);
+        }
+
+        int titleId = getTitleId();
+        if (titleId != 0) {
+            setTitle(titleId);
+        }
+
+        wikiList = findViewById(R.id.wikiList);
         api.getAssignmentList(userId, 1, 20).subscribeOn(Schedulers.io())
                 .compose(RxUtils.handleResponse())          // 业务 code 过滤
                 .compose(RxUtils.applySchedulers())         // 线程切换
@@ -59,8 +86,9 @@ public abstract class AbstractWikiActivity extends DemoDialogsActivity {
                     @Override
                     public void onNext(AssignListData data) {
                         // 更新 UI：data.getDataList()
+                        refreshUi(data.getDataList());
                         String msg = new Gson().toJson(data);
-                        Toast.makeText(AbstractWikiActivity.this, msg, Toast.LENGTH_LONG).show();
+                        Toast.makeText(BaseWikiActivity.this, msg, Toast.LENGTH_LONG).show();
                     }
                     @Override
                     public void onError(Throwable e) {
@@ -84,17 +112,28 @@ public abstract class AbstractWikiActivity extends DemoDialogsActivity {
     }
 
     @Override
-    public void onDialogClick(Dialog dialog) {
-        ChatMessagesActivity.open(this);
+    public void onDialogClick(DatasetItem dialog) {
+        ChatMessagesActivity.openWiki(this, dialog.getDatasetId());
+    }
+
+    @Override
+    public void onDialogLongClick(DatasetItem dialog) {
+        AppUtils.showToast(
+                this,
+                dialog.getDatasetName(),
+                false);
     }
 
     private void initAdapter() {
-        super.dialogsAdapter = new DialogsListAdapter<>(R.layout.item_custom_dialog, super.imageLoader);
-        super.dialogsAdapter.setItems(getDialogs());
+        wikiAdapter = new WikiListAdapter(R.layout.item_custom_dialog, imageLoader);
+        wikiAdapter.setOnDialogClickListener(this);
+        wikiAdapter.setOnDialogLongClickListener(this);
+        wikiList.setAdapter(wikiAdapter);
+    }
 
-        super.dialogsAdapter.setOnDialogClickListener(this);
-        super.dialogsAdapter.setOnDialogLongClickListener(this);
-
-        dialogsList.setAdapter(super.dialogsAdapter);
+    private void refreshUi(List<DatasetItem> data) {
+//        List<Dialog> items = DialogsFixtures.getDialogs();
+//        super.dialogsAdapter.setItems(items);
+        wikiAdapter.setItems(data);
     }
 }
