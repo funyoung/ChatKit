@@ -7,6 +7,11 @@ import androidx.annotation.StringRes;
 
 import com.stfalcon.chatkit.sample.R;
 
+import io.reactivex.Observable;
+import phos.fri.aiassistant.entity.ApiResponse;
+import phos.fri.aiassistant.entity.AssignListData;
+import phos.fri.aiassistant.net.ApiService;
+
 public class PublicWikiActivity extends BaseWikiActivity {
 
     public static void open(Context context) {
@@ -24,7 +29,7 @@ public class PublicWikiActivity extends BaseWikiActivity {
 //    }
 
     @Override
-    protected String getUserId() {
+    protected Observable<ApiResponse<AssignListData>> getWikiList(ApiService api) {
         return null;
     }
 }

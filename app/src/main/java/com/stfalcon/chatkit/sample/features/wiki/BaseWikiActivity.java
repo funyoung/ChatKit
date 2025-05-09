@@ -17,10 +17,12 @@ import com.stfalcon.chatkit.sample.utils.AppUtils;
 import java.io.IOException;
 import java.util.List;
 
+import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import phos.fri.aiassistant.entity.ApiException;
+import phos.fri.aiassistant.entity.ApiResponse;
 import phos.fri.aiassistant.entity.AssignListData;
 import phos.fri.aiassistant.entity.DatasetItem;
 import phos.fri.aiassistant.net.ApiClient;
@@ -36,7 +38,7 @@ public abstract class BaseWikiActivity extends AppCompatActivity
     private WikiList wikiList;
     protected WikiListAdapter wikiAdapter;
 
-    protected abstract String getUserId();
+    protected abstract Observable<ApiResponse<AssignListData>> getWikiList(ApiService api);
 
     private ApiService api = ApiClient.getApiService();
 
@@ -53,8 +55,9 @@ public abstract class BaseWikiActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wiki_list);
 
-        String userId = getUserId();
-        if (null == userId) {
+
+        Observable<ApiResponse<AssignListData>> observable = getWikiList(api);
+        if (null == observable) {
             // 直接进入固定的法律咨询.
             ChatMessagesActivity.openWiki(this, Profile.lawDatasetId);
             finish();
@@ -75,7 +78,7 @@ public abstract class BaseWikiActivity extends AppCompatActivity
         }
 
         wikiList = findViewById(R.id.wikiList);
-        api.getAssignmentList(userId, 1, 20).subscribeOn(Schedulers.io())
+        observable.subscribeOn(Schedulers.io())
                 .compose(RxUtils.handleResponse())          // 业务 code 过滤
                 .compose(RxUtils.applySchedulers())         // 线程切换
                 .subscribe(new Observer<AssignListData>() {

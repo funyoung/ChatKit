@@ -10,6 +10,10 @@ import com.stfalcon.chatkit.utils.DateFormatter;
 
 import java.util.Date;
 
+import io.reactivex.Observable;
+import phos.fri.aiassistant.entity.ApiResponse;
+import phos.fri.aiassistant.entity.AssignListData;
+import phos.fri.aiassistant.net.ApiService;
 import phos.fri.aiassistant.settings.Profile;
 
 public class TeamWikiActivity extends BaseWikiActivity
@@ -30,8 +34,8 @@ public class TeamWikiActivity extends BaseWikiActivity
 //    }
 
     @Override
-    protected String getUserId() {
-        return Profile.teamId;
+    protected Observable<ApiResponse<AssignListData>> getWikiList(ApiService api) {
+        return api.getTeamAssignmentList(Profile.teamId, 1, 20);
     }
 
     @Override

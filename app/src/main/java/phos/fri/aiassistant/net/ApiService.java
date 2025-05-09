@@ -29,10 +29,16 @@ public interface ApiService {
             @Path("datasetId") String datasetId
     );
 
-    // 这个userId可以是用户个人Id，也可以是共享团队的Id
     @GET("assign/list/user/{userId}")
-    Observable<ApiResponse<AssignListData>> getAssignmentList(
+    Observable<ApiResponse<AssignListData>> getUserAssignmentList(
             @Path("userId") String userId,
+            @Query("pageNo") int pageNo,
+            @Query("pageSize") int pageSize
+    );
+
+    @GET("assign/list/team/{teamId}")
+    Observable<ApiResponse<AssignListData>> getTeamAssignmentList(
+            @Path("teamId") String teamId,
             @Query("pageNo") int pageNo,
             @Query("pageSize") int pageSize
     );
