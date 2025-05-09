@@ -3,15 +3,11 @@ package phos.fri.aiassistant.net;
 
 import android.util.Log;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.concurrent.TimeUnit;
 
-import io.reactivex.schedulers.Schedulers;
-import okhttp3.Cache;
-import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -23,7 +19,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
     private static String TAG= "ApiClient";
-    private static final String BASE_URL = "http://192.168.132.104:38082/";
+//    private static final String BASE_URL = "http://192.168.132.104:38082/";
+    private static final String BASE_URL = "http://101.200.152.119:38082";
 
     public static final long CONNECT_TIMEOUT = 6;
     public static final long WRITE_TIMEOUT = 6;

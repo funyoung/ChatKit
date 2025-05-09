@@ -2,13 +2,13 @@ package com.stfalcon.chatkit.sample.features.chat;
 
 import static android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.net.http.NetworkException;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -36,25 +36,23 @@ import com.stfalcon.chatkit.sample.common.intent.Schema;
 import com.stfalcon.chatkit.sample.features.demo.DemoMessagesActivity;
 import com.stfalcon.chatkit.sample.features.demo.custom.media.holders.IncomingVoiceMessageViewHolder;
 import com.stfalcon.chatkit.sample.features.demo.custom.media.holders.OutcomingVoiceMessageViewHolder;
+import com.stfalcon.chatkit.sample.features.wiki.AbstractWikiActivity;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.exceptions.Exceptions;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.ResponseBody;
 import phos.fri.aiassistant.entity.ApiResponse;
+import phos.fri.aiassistant.entity.AssignListData;
 import phos.fri.aiassistant.entity.ChatListData;
 import phos.fri.aiassistant.net.ApiClient;
-import phos.fri.aiassistant.net.ApiException;
+import phos.fri.aiassistant.entity.ApiException;
 import phos.fri.aiassistant.net.ApiService;
 import phos.fri.aiassistant.net.RxUtils;
+import phos.fri.aiassistant.settings.Profile;
 
 public class ChatMessagesActivity extends DemoMessagesActivity
         implements MessageInput.InputListener,
@@ -82,46 +80,22 @@ public class ChatMessagesActivity extends DemoMessagesActivity
     public static void openTts(Context context) {
         openWithMessage(context, Schema.TOOL_TTS);
     }
+    public static void openWiki(Activity context, String datasetId) {
+        Intent intent = new Intent(context, ChatMessagesActivity.class);
+        intent.putExtra(EXTRA_MESSAGE, Schema.APP_WIKI);
+        intent.putExtra("DATA", datasetId);
+        context.startActivity(intent);
+    }
+
 
     private MessagesList messagesList;
     private MessageInput input;
 
     private ApiService api = ApiClient.getApiService();
+
     // 假设我们要第 1 页，每页 20 条
-    String userId = "u1001";
-    String datasetId = "d1001";
     private void loadChatList() {
-        api.getChatList(userId, datasetId).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<ApiResponse>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                    }
-
-                    @Override
-                    public void onNext(ApiResponse responseBody) {
-                        try {
-                            String msg = responseBody.getCode() + responseBody.getMessage();
-                            Toast.makeText(ChatMessagesActivity.this, msg, Toast.LENGTH_SHORT).show();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            showError(e);
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                        showError(e);
-                    }
-
-                    @Override
-                    public void onComplete() {
-                    }
-                });
-    }
-    private void loadChatListEx() {
-        api.getChatList(userId, datasetId).subscribeOn(Schedulers.io())
+        api.getChatList(Profile.userId, Profile.datasetId).subscribeOn(Schedulers.io())
                 .compose(RxUtils.handleResponse())          // 业务 code 过滤
                 .compose(RxUtils.applySchedulers())         // 线程切换
                 .subscribe(new Observer<ChatListData>() {
@@ -186,8 +160,7 @@ public class ChatMessagesActivity extends DemoMessagesActivity
         super.onResume();
         postHandleExtraMessage();
 
-//        loadChatList();
-        loadChatListEx();
+        loadChatList();
     }
 
     @Override

@@ -12,5 +12,12 @@ public class ApiResponse<T> {
     public int getCode() { return code; }
     public T getData() { return data; }
     public String getMessage() { return message; }
+
+    public T getDataOrThrow() throws ApiException {
+        if (isSuccess()) {
+            return data;
+        }
+        throw new ApiException(code, "API请求失败");
+    }
 }
 

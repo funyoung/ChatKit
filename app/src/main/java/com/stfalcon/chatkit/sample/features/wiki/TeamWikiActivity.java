@@ -13,6 +13,8 @@ import com.stfalcon.chatkit.utils.DateFormatter;
 import java.util.Date;
 import java.util.List;
 
+import phos.fri.aiassistant.settings.Profile;
+
 public class TeamWikiActivity extends AbstractWikiActivity
         implements DateFormatter.Formatter {
 
@@ -28,6 +30,11 @@ public class TeamWikiActivity extends AbstractWikiActivity
     @Override
     protected List<Dialog> getDialogs() {
         return DialogsFixtures.getDialogs();
+    }
+
+    @Override
+    protected String getUserId() {
+        return Profile.teamId;
     }
 
     @Override

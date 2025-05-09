@@ -26,4 +26,9 @@ public class PublicWikiActivity extends AbstractWikiActivity {
     protected List<Dialog> getDialogs() {
         return DialogsFixtures.getDialogs();
     }
+
+    @Override
+    protected String getUserId() {
+        return null;
+    }
 }

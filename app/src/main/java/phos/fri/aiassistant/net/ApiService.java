@@ -5,12 +5,14 @@ import io.reactivex.Observable;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import phos.fri.aiassistant.entity.ApiResponse;
+import phos.fri.aiassistant.entity.AssignListData;
 import phos.fri.aiassistant.entity.ChatListData;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * @author
@@ -25,6 +27,14 @@ public interface ApiService {
     Observable<ApiResponse<ChatListData>> getChatList(
             @Path("userId") String userId,
             @Path("datasetId") String datasetId
+    );
+
+    // 这个userId可以是用户个人Id，也可以是共享团队的Id
+    @GET("assign/list/user/{userId}")
+    Observable<ApiResponse<AssignListData>> getAssignmentList(
+            @Path("userId") String userId,
+            @Query("pageNo") int pageNo,
+            @Query("pageSize") int pageSize
     );
 
     @Headers(CONTENT_TYPE)

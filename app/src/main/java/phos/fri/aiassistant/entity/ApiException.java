@@ -1,4 +1,4 @@
-package phos.fri.aiassistant.net;
+package phos.fri.aiassistant.entity;
 
 // 自定义异常
 public class ApiException extends Exception {

@@ -11,6 +11,8 @@ import com.stfalcon.chatkit.sample.common.data.model.Dialog;
 
 import java.util.List;
 
+import phos.fri.aiassistant.settings.Profile;
+
 public class MyWikiActivity extends AbstractWikiActivity {
 
     public static void open(Context context) {
@@ -25,5 +27,10 @@ public class MyWikiActivity extends AbstractWikiActivity {
     @Override
     protected List<Dialog> getDialogs() {
         return DialogsFixtures.getDialogs();
+    }
+
+    @Override
+    protected String getUserId() {
+        return Profile.userId;
     }
 }

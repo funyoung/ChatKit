@@ -4,6 +4,7 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import phos.fri.aiassistant.entity.ApiException;
 import phos.fri.aiassistant.entity.ApiResponse;
 
 public class RxUtils {
