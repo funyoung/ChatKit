@@ -2,6 +2,7 @@ package phos.fri.aiassistant.entity;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Collections;
 import java.util.List;
 
 public class OcrData {
@@ -15,6 +16,13 @@ public class OcrData {
         this.result = result;
     }
 
+    public String parseContent() {
+        if (null != result) {
+            return result.concatContent();
+        }
+        return null;
+    }
+
     public static class Result {
         @SerializedName("page_contents")
         private List<PageContent> contentList;
@@ -25,6 +33,25 @@ public class OcrData {
 
         public void setContentList(List<PageContent> contentList) {
             this.contentList = contentList;
+        }
+
+        public String concatContent() {
+            if (null != contentList && !contentList.isEmpty()) {
+                StringBuilder sb = new StringBuilder();
+                for (PageContent content: contentList) {
+                    List<PageLayout> layoutList = null == content ? Collections.emptyList() : content.getLayoutList();
+                    if (null != layoutList) {
+                        for (PageLayout layout : layoutList) {
+                            String text = null == layout ? null : layout.getText();
+                            if (null != text) {
+                                sb.append(text);
+                            }
+                        }
+                    }
+                }
+                return sb.toString();
+            }
+            return null;
         }
     }
 

@@ -327,6 +327,12 @@ public class ChatMessagesActivity extends DemoMessagesActivity
         messagesAdapter.addToStart(MessagesFixtures.getFileMessage(file), true);
         // TODO: 上传文件并等待ocr结果。
         input.setMute(true);
+        try {
+            session.performOcr(file);
+        } catch (Exception e) {
+            e.printStackTrace();
+            input.setMute(false);
+        }
         input.postDelayed(new Runnable() {
             @Override
             public void run() {

@@ -32,13 +32,17 @@ public class Config {
     protected static final long TIMEOUT_NORMAL = 20;
     protected static final long TIMEOUT_LONG = 30;
 
+    private static String safeDecode(String msg) {
+        try {
+            return URLDecoder.decode(msg, "UTF-8");
+        } catch (IllegalArgumentException | UnsupportedEncodingException e) {
+            return msg; // 解码失败时，直接返回原始日志
+        }
+    }
+
     protected static HttpLoggingInterceptor LoggingInterceptor() {
         return new HttpLoggingInterceptor(message -> {
-            try {
-                Log.d(TAG, "=========" + URLDecoder.decode(message, "UTF-8"));
-            } catch (UnsupportedEncodingException e) {
-                throw new RuntimeException(e);
-            }
+            Log.d(TAG, "=========" + safeDecode(message));
         }).setLevel(HttpLoggingInterceptor.Level.BODY);
     }
 
@@ -83,18 +87,21 @@ public class Config {
         public Response intercept(Chain chain) throws IOException {
             Request request = chain.request();
             Request.Builder builder = request.newBuilder()
-                    .header("Accept", "application/json")
-
                     .method(request.method(), request.body());
 //            builder = builder.addHeader("channel",  URLEncoder.encode(UserConfig.getInstance(null).getChannel2(), "UTF-8"))
 //                    .addHeader("transid",UUID.randomUUID().toString());
-            if (apiKey != null) {
-                builder.header("Authorization", "Bearer " + apiKey);
-            }
-            if (userId != null) {
-                builder.header("userId", userId);
-            }
             String url = request.url().toString();
+
+            if (!url.endsWith("ai/api/ocr2/parse")) {
+                builder.header("Accept", "application/json");
+                if (apiKey != null) {
+                    builder.header("Authorization", "Bearer " + apiKey);
+                }
+                if (userId != null) {
+                    builder.header("userId", userId);
+                }
+            }
+
             if (url.endsWith("chat/completions")) {
                 builder.header("Accept", "text/event-stream");
             }

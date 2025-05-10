@@ -9,8 +9,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,15 +24,20 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import phos.fri.aiassistant.entity.ApiException;
 import phos.fri.aiassistant.entity.ChatListData;
 import phos.fri.aiassistant.entity.FuckNewChatData;
 import phos.fri.aiassistant.entity.NewChatData;
 import phos.fri.aiassistant.entity.NewChatRequest;
+import phos.fri.aiassistant.entity.OcrData;
 import phos.fri.aiassistant.net.AiHelper;
 import phos.fri.aiassistant.net.ApiClient;
 import phos.fri.aiassistant.net.RxUtils;
+import phos.fri.aiassistant.net.UploadClient;
 import phos.fri.aiassistant.settings.Profile;
 
 import phos.fri.aiassistant.entity.ChatRequest;
@@ -50,7 +58,8 @@ public class ChatSession {
 
     // 假设我们要第 1 页，每页 20 条
     protected void loadChatList() {
-        ApiClient.getService(Profile.token, userId).getChatList(userId, datasetId).subscribeOn(Schedulers.io())
+        ApiClient.getService(Profile.token, userId).getChatList(userId, datasetId)
+                .subscribeOn(Schedulers.io())
                 .compose(RxUtils.handleResponse())          // 业务 code 过滤
                 .compose(RxUtils.applySchedulers())         // 线程切换
                 .subscribe(new Observer<ChatListData>() {
@@ -291,6 +300,68 @@ public class ChatSession {
                     + Character.digit(hex.charAt(i+1), 16));
         }
         return data;
+    }
+
+    public void performOcr(String path) throws UnsupportedEncodingException {
+        File file = new File(path);
+        if (file.exists()) {
+            RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), file);
+            String filename = URLEncoder.encode(file.getName(), "UTF-8");;
+            MultipartBody.Part body = MultipartBody.Part.createFormData("image", filename, requestFile);
+            // 创建文件请求体
+//            RequestBody requestFile = RequestBody.create(
+//                    MediaType.parse("multipart/form-data"),
+//                    file
+//            );
+//
+//            MultipartBody.Part body = MultipartBody.Part.createFormData(
+//                    "file",
+//                    file.getName(),
+//                    requestFile
+//            );
+            UploadClient.getService(Profile.token, Profile.userId).uploadFile(body)
+                    .subscribeOn(Schedulers.io())
+                    .compose(RxUtils.handleResponse())          // 业务 code 过滤
+                    .compose(RxUtils.applySchedulers())         // 线程切换
+                    .subscribe(new Observer<OcrData>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                            // 显示 loading
+                        }
+                        @Override
+                        public void onNext(OcrData data) {
+                            debugShow("", data);
+                        }
+                        @Override
+                        public void onError(Throwable e) {
+                            e.printStackTrace();
+                            // 隐藏 loading
+                            if (e instanceof IOException) {
+                                // 网络错误提示
+                            } else if (e instanceof JsonParseException) {
+                                // 解析错误提示
+                            } else if (e instanceof ApiException) {
+                                // 业务错误提示：((ApiException)e).getMessage()
+                            } else {
+                                // 其他错误
+                            }
+                        }
+                        @Override
+                        public void onComplete() {
+                            // 隐藏 loading
+                        }
+                    });
+        } else {
+            listener.toast("文件不存在： " + path);
+        }
+    }
+
+    private <T> void debugShow(String s, T data) {
+        // 更新 UI：data.getDataList()
+        String msg = s + new Gson().toJson(data);
+        listener.toast(msg);
+        Log.d(TAG, msg);
+        //Toast.makeText(ChatMessagesActivity.this, msg, Toast.LENGTH_LONG).show();
     }
 }
 

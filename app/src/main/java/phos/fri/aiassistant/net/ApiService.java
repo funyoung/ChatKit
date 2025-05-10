@@ -81,22 +81,4 @@ public interface ApiService {
 //    @POST("/ai/api/v1/chats_openai/{chatId}/chat/completions")
 //    Observable<ApiResponse<NewChatData>> chatCompletion(@Body CreateChatRequest request);
 
-    /**
-     * 调用 OpenAI 风格的流式聊天完成接口
-     *
-     * @param chatId  路径中的聊天会话等标识
-     * @param request    请求体，会以 JSON 发送
-     * @return           ResponseBody，可通过流方式逐行读取 SSE 事件
-     */
-    @Streaming
-    @Headers({
-            "accept: text/event-stream;charset=UTF-8",
-            "userId: u1001",
-            CONTENT_TYPE
-    })
-    @POST("ai/api/v1/chats_openai/{chatId}/chat/completions")
-    Observable<ApiResponse<String>> streamChatCompletions(
-            @Path("chatId") String chatId,
-            @Body ChatCompletionRequest request
-    );
 }

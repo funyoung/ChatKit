@@ -14,7 +14,7 @@ import retrofit2.http.Part;
  */
 public interface UploadService {
     @Multipart
-    @POST("/parse")
+    @POST("ai/api/ocr2/parse")
     Observable<ApiResponse<OcrData>> uploadFile(
             @Part MultipartBody.Part filePart
     );
