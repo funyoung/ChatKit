@@ -2,13 +2,11 @@ package phos.fri.aiassistant.net;
 
 
 import io.reactivex.Observable;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import phos.fri.aiassistant.entity.ApiResponse;
 import phos.fri.aiassistant.entity.AssignListData;
 import phos.fri.aiassistant.entity.ChatCompletionRequest;
 import phos.fri.aiassistant.entity.ChatListData;
-import phos.fri.aiassistant.entity.CreateChatRequest;
+import phos.fri.aiassistant.entity.NewChatRequest;
 import phos.fri.aiassistant.entity.NewChatData;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -50,7 +48,7 @@ public interface ApiService {
 
     @Headers(CONTENT_TYPE)
     @POST("ai/create/api/v1/chats")
-    Observable<ApiResponse<NewChatData>> createChat(@Body CreateChatRequest request);
+    Observable<ApiResponse<NewChatData>> createChat(@Body NewChatRequest request);
 
 
 //    @POST("/ai/api/v1/chats_openai/{chatId}/chat/completions")

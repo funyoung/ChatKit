@@ -42,10 +42,10 @@ public class Config {
         }).setLevel(HttpLoggingInterceptor.Level.BODY);
     }
 
-    public static OkHttpClient buildHttpClient(long connectTimeout, long writeTimeout, long readTimeout,
-                                               HttpLoggingInterceptor httpLoggingInterceptor) {
-        return buildHttpClient(connectTimeout, writeTimeout, readTimeout, httpLoggingInterceptor, null);
-    }
+//    public static OkHttpClient buildHttpClient(long connectTimeout, long writeTimeout, long readTimeout,
+//                                               HttpLoggingInterceptor httpLoggingInterceptor) {
+//        return buildHttpClient(connectTimeout, writeTimeout, readTimeout, httpLoggingInterceptor, null);
+//    }
     public static OkHttpClient buildHttpClient(long connectTimeout, long writeTimeout, long readTimeout,
                                                HttpLoggingInterceptor httpLoggingInterceptor, String apiKey) {
         return new OkHttpClient.Builder()

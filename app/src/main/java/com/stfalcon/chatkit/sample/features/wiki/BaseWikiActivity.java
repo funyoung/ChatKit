@@ -59,7 +59,7 @@ public abstract class BaseWikiActivity extends AppCompatActivity
         Observable<ApiResponse<AssignListData>> observable = getWikiList(api);
         if (null == observable) {
             // 直接进入固定的法律咨询.
-            ChatMessagesActivity.openWiki(this, Profile.lawDatasetId);
+            ChatMessagesActivity.openWiki(this, Profile.userId, Profile.lawDatasetId);
             finish();
             return;
         }
@@ -115,8 +115,8 @@ public abstract class BaseWikiActivity extends AppCompatActivity
     }
 
     @Override
-    public void onDialogClick(DatasetItem dialog) {
-        ChatMessagesActivity.openWiki(this, dialog.getDatasetId());
+    public void onDialogClick(DatasetItem datasetItem) {
+        ChatMessagesActivity.openWiki(this, Profile.userId, datasetItem.getDatasetId());
     }
 
     @Override

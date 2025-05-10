@@ -22,8 +22,6 @@ import com.developer.filepicker.controller.DialogSelectionListener;
 import com.developer.filepicker.model.DialogConfigs;
 import com.developer.filepicker.model.DialogProperties;
 import com.developer.filepicker.view.FilePickerDialog;
-import com.google.gson.Gson;
-import com.google.gson.JsonParseException;
 import com.stfalcon.chatkit.messages.MessageHolders;
 import com.stfalcon.chatkit.messages.MessageInput;
 import com.stfalcon.chatkit.messages.MessagesList;
@@ -38,23 +36,13 @@ import com.stfalcon.chatkit.sample.features.demo.custom.media.holders.IncomingVo
 import com.stfalcon.chatkit.sample.features.demo.custom.media.holders.OutcomingVoiceMessageViewHolder;
 
 import java.io.File;
-import java.io.IOException;
-
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
-import phos.fri.aiassistant.entity.ChatListData;
-import phos.fri.aiassistant.net.ApiClient;
-import phos.fri.aiassistant.entity.ApiException;
-import phos.fri.aiassistant.net.ApiService;
-import phos.fri.aiassistant.net.RxUtils;
-import phos.fri.aiassistant.settings.Profile;
 
 public class ChatMessagesActivity extends DemoMessagesActivity
         implements MessageInput.InputListener,
         MessageInput.AttachmentsListener,
         MessageHolders.ContentChecker<Message>,
-        DialogInterface.OnClickListener {
+        DialogInterface.OnClickListener,
+        Listener {
     private static final String EXTRA_MESSAGE = "phos.fri.aiassistant.MESSAGE";
     private static void openWithMessage(Context context, String message) {
         Intent intent = new Intent(context, ChatMessagesActivity.class);
@@ -66,6 +54,8 @@ public class ChatMessagesActivity extends DemoMessagesActivity
 
     private String extraMessagePending = null;
 
+    private ChatSession session;
+
 
     public static void open(Context context) {
         context.startActivity(new Intent(context, ChatMessagesActivity.class));
@@ -76,9 +66,12 @@ public class ChatMessagesActivity extends DemoMessagesActivity
     public static void openTts(Context context) {
         openWithMessage(context, Schema.TOOL_TTS);
     }
-    public static void openWiki(Activity context, String datasetId) {
+
+    // 这个userId不区分teamId
+    public static void openWiki(Activity context, String userId, String datasetId) {
         Intent intent = new Intent(context, ChatMessagesActivity.class);
         intent.putExtra(EXTRA_MESSAGE, Schema.APP_WIKI);
+        intent.putExtra("USER", userId);
         intent.putExtra("DATA", datasetId);
         context.startActivity(intent);
     }
@@ -86,44 +79,6 @@ public class ChatMessagesActivity extends DemoMessagesActivity
 
     private MessagesList messagesList;
     private MessageInput input;
-
-    private ApiService api = ApiClient.getService();
-
-    // 假设我们要第 1 页，每页 20 条
-    private void loadChatList(String userId, String dataId) {
-        api.getChatList(userId, dataId).subscribeOn(Schedulers.io())
-                .compose(RxUtils.handleResponse())          // 业务 code 过滤
-                .compose(RxUtils.applySchedulers())         // 线程切换
-                .subscribe(new Observer<ChatListData>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        // 显示 loading
-                    }
-                    @Override
-                    public void onNext(ChatListData data) {
-                        // 更新 UI：data.getDataList()
-                        String msg = new Gson().toJson(data);
-                        Toast.makeText(ChatMessagesActivity.this, msg, Toast.LENGTH_LONG).show();
-                    }
-                    @Override
-                    public void onError(Throwable e) {
-                        // 隐藏 loading
-                        if (e instanceof IOException) {
-                            // 网络错误提示
-                        } else if (e instanceof JsonParseException) {
-                            // 解析错误提示
-                        } else if (e instanceof ApiException) {
-                            // 业务错误提示：((ApiException)e).getMessage()
-                        } else {
-                            // 其他错误
-                        }
-                    }
-                    @Override
-                    public void onComplete() {
-                        // 隐藏 loading
-                    }
-                });
-    }
 
     private void showError(Throwable e) {
         Toast.makeText(this, "Exception: " + e.getMessage(), Toast.LENGTH_LONG).show();
@@ -156,7 +111,7 @@ public class ChatMessagesActivity extends DemoMessagesActivity
         super.onResume();
         postHandleExtraMessage();
 
-        loadChatList(Profile.userId, Profile.datasetId);
+        //session.loadChatList(Profile.userId, Profile.datasetId);
     }
 
     @Override
@@ -178,6 +133,8 @@ public class ChatMessagesActivity extends DemoMessagesActivity
             showFilePickerDialog();
         } else if (Schema.TOOL_TTS.equalsIgnoreCase(extraMessagePending)) {
             Toast.makeText(this, "TTS文字转语音功能即将上线，敬请期待。", Toast.LENGTH_SHORT).show();
+        } else if (Schema.APP_WIKI.equalsIgnoreCase(extraMessagePending)) {
+            session.attach(getIntent().getStringExtra("USER"), getIntent().getStringExtra("DATA"));
         } else {
             // nothing need to do.
         }
@@ -424,5 +381,10 @@ public class ChatMessagesActivity extends DemoMessagesActivity
         super.messagesAdapter.enableSelectionMode(this);
         super.messagesAdapter.setLoadMoreListener(this);
         this.messagesList.setAdapter(super.messagesAdapter);
+    }
+
+    @Override
+    public void toast(String msg) {
+        Toast.makeText(ChatMessagesActivity.this, msg, Toast.LENGTH_LONG).show();
     }
 }

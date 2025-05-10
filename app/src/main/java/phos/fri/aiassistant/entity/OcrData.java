@@ -4,20 +4,41 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-// data 字段对应
 public class OcrData {
     private Result result;
+
+    public Result getResult() {
+        return result;
+    }
+
+    public void setResult(Result result) {
+        this.result = result;
+    }
 
     public static class Result {
         @SerializedName("page_contents")
         private List<PageContent> contentList;
-        // 其他字段根据不需要，忽略
+
+        public List<PageContent> getContentList() {
+            return contentList;
+        }
+
+        public void setContentList(List<PageContent> contentList) {
+            this.contentList = contentList;
+        }
     }
 
     public static class PageContent {
         @SerializedName("page_layouts")
         private List<PageLayout> layoutList;
-        // 其他字段根据不需要，忽略
+
+        public List<PageLayout> getLayoutList() {
+            return layoutList;
+        }
+
+        public void setLayoutList(List<PageLayout> layoutList) {
+            this.layoutList = layoutList;
+        }
     }
 
     public static class PageLayout {
@@ -25,5 +46,30 @@ public class OcrData {
         private Integer id;
         private String type;
         private String text;
+
+        public Integer getId() {
+            return id;
+        }
+
+        public void setId(Integer id) {
+            this.id = id;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public void setText(String text) {
+            this.text = text;
+        }
     }
 }
+
