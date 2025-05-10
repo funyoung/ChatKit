@@ -432,17 +432,30 @@ public class ChatMessagesActivity extends DemoMessagesActivity
         });
     }
 
-    private String pendingChatMessage = null;
+    private static final String TAG = "ChatMessageActivity";
+    private StringBuilder pendingChatMessage = new StringBuilder();
     @Override
     public void onChatUpdate(String id, String content, String finishReason) {
-        toast("onChatUpdate: " + id + ", " + content + ", " + finishReason);
-        if (null == finishReason && null != content) {
-            if (null == pendingChatMessage) {
-                pendingChatMessage = content;
-                messagesAdapter.addToStart(MessagesFixtures.getTextMessage(pendingChatMessage, "ai-bolt"), true);
+        Log.d(TAG, "onChatUpdate: " + id + ", " + content + ", " + finishReason);
+
+        if (null != content) {
+            if (0 == pendingChatMessage.length()) {
+                pendingChatMessage.append(content);
+                messagesAdapter.addToStart(MessagesFixtures.getTextMessage(pendingChatMessage.toString(), "ai-bolt"), true);
             } else {
-                messagesAdapter.updateToStart(pendingChatMessage, true);
-                messagesList.scrollToPosition(0);
+                if (null != finishReason /*"stop".equalsIgnoreCase(finishReason)*/) {
+                    if (!content.equals(pendingChatMessage.toString())) {
+                        pendingChatMessage.setLength(0);
+                        pendingChatMessage.append(content);
+                        messagesAdapter.updateToStart(pendingChatMessage.toString(), true);
+                        messagesList.scrollToPosition(0);
+                    }
+                    onChatFinish();
+                } else {
+                    pendingChatMessage.append(content);
+                    messagesAdapter.updateToStart(pendingChatMessage.toString(), true);
+                    messagesList.scrollToPosition(0);
+                }
             }
         } else if (null != finishReason) {
             onChatFinish();

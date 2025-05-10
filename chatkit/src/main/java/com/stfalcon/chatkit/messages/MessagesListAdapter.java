@@ -170,7 +170,7 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
             }
         }
 
-        notifyItemRangeInserted(0, 1);
+        notifyItemRangeChanged(0, 1);
         if (layoutManager != null && scroll) {
             layoutManager.scrollToPosition(0);
         }
