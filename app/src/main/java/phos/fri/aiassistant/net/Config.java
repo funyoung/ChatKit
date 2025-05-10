@@ -27,7 +27,7 @@ public class Config {
     //    protected static final String BASE_URL = "http://192.168.132.104:38082/";  // 内网
 //    protected static final String BASE_URL = "http://101.200.152.119:38082";   // 互联网
     protected static final String BASE_URL = "http://20.0.52.93:38082";  // 2类区专网
-    protected static final String TOKEN = "ragflow-UxMDE4MGMyMmIyMTExZjBhNjRkMDI0Mm";
+    public static final String TOKEN = "ragflow-UxMDE4MGMyMmIyMTExZjBhNjRkMDI0Mm";
     protected static final long TIMEOUT_SHORT = 6;
     protected static final long TIMEOUT_NORMAL = 20;
     protected static final long TIMEOUT_LONG = 30;
@@ -47,13 +47,14 @@ public class Config {
 //        return buildHttpClient(connectTimeout, writeTimeout, readTimeout, httpLoggingInterceptor, null);
 //    }
     public static OkHttpClient buildHttpClient(long connectTimeout, long writeTimeout, long readTimeout,
-                                               HttpLoggingInterceptor httpLoggingInterceptor, String apiKey) {
+                                               HttpLoggingInterceptor httpLoggingInterceptor,
+                                               String apiKey, String userId) {
         return new OkHttpClient.Builder()
                 .connectTimeout(connectTimeout, TimeUnit.SECONDS)
                 .writeTimeout(writeTimeout, TimeUnit.SECONDS)
                 .readTimeout(readTimeout, TimeUnit.SECONDS)
                 .retryOnConnectionFailure(true)
-                .addNetworkInterceptor(new HttpHeaderInterceptor(apiKey))
+                .addNetworkInterceptor(new HttpHeaderInterceptor(apiKey, userId))
                 .sslSocketFactory(SSLSocketClient.getSSLSocketFactory()) //设置不验https的证书
                 .hostnameVerifier(SSLSocketClient.getHostnameVerifier()) //设置不验https的证书
                 .addNetworkInterceptor(httpLoggingInterceptor)  //注意放在header拦截器的后面，否则打印不出来拦截器里的header
@@ -70,11 +71,13 @@ public class Config {
     }
 
     public static class HttpHeaderInterceptor implements Interceptor {
-        public HttpHeaderInterceptor(String apiKey) {
+        public HttpHeaderInterceptor(String apiKey, String userId) {
             this.apiKey = apiKey;
+            this.userId = userId;
         }
 
         private final String apiKey;
+        private final String userId;
         @NonNull
         @Override
         public Response intercept(Chain chain) throws IOException {
@@ -87,6 +90,9 @@ public class Config {
 //                    .addHeader("transid",UUID.randomUUID().toString());
             if (apiKey != null) {
                 builder.header("Authorization", "Bearer " + apiKey);
+            }
+            if (userId != null) {
+                builder.header("userId", userId);
             }
             return chain.proceed(builder.build());
         }

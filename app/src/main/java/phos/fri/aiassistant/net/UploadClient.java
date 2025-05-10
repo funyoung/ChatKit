@@ -14,13 +14,13 @@ public class UploadClient {
 
 
     private static Retrofit retrofit;
-    public static Retrofit getRetrofit(String apiToken) {
+    public static Retrofit getRetrofit(String apiToken, String userId) {
         if (retrofit == null) {
             //添加日志拦截器
             HttpLoggingInterceptor httpLoggingInterceptor = Config.LoggingInterceptor();
 
             //获取OkHttpClient
-            OkHttpClient client = Config.buildHttpClient(CONNECT_TIMEOUT, WRITE_TIMEOUT, READ_TIMEOUT, httpLoggingInterceptor, apiToken);
+            OkHttpClient client = Config.buildHttpClient(CONNECT_TIMEOUT, WRITE_TIMEOUT, READ_TIMEOUT, httpLoggingInterceptor, apiToken, userId);
 
             //初始化retrofit
             retrofit = Config.buildRetrofit(client);
@@ -28,8 +28,8 @@ public class UploadClient {
         return retrofit;
     }
 
-    public static  UploadService getService(String apiToken) {
-        return getRetrofit(apiToken).create(UploadService.class);
+    public static  UploadService getService(String apiToken, String userId) {
+        return getRetrofit(apiToken, userId).create(UploadService.class);
     }
 }
 

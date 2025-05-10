@@ -27,6 +27,7 @@ import phos.fri.aiassistant.entity.AssignListData;
 import phos.fri.aiassistant.entity.DatasetItem;
 import phos.fri.aiassistant.net.ApiClient;
 import phos.fri.aiassistant.net.ApiService;
+import phos.fri.aiassistant.net.Config;
 import phos.fri.aiassistant.net.RxUtils;
 import phos.fri.aiassistant.settings.Profile;
 
@@ -40,7 +41,7 @@ public abstract class BaseWikiActivity extends AppCompatActivity
 
     protected abstract Observable<ApiResponse<AssignListData>> getWikiList(ApiService api);
 
-    private ApiService api = ApiClient.getService();
+    private ApiService api = ApiClient.getService(Profile.token, Profile.userId);
 
     protected String getTitleStr() {
         return null;

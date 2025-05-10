@@ -6,6 +6,7 @@ import phos.fri.aiassistant.entity.ApiResponse;
 import phos.fri.aiassistant.entity.AssignListData;
 import phos.fri.aiassistant.entity.ChatCompletionRequest;
 import phos.fri.aiassistant.entity.ChatListData;
+import phos.fri.aiassistant.entity.FuckNewChatData;
 import phos.fri.aiassistant.entity.NewChatRequest;
 import phos.fri.aiassistant.entity.NewChatData;
 import retrofit2.http.Body;
@@ -46,9 +47,12 @@ public interface ApiService {
             @Query("pageSize") int pageSize
     );
 
-    @Headers(CONTENT_TYPE)
+    @Headers({
+            "userId: u1001",
+            CONTENT_TYPE
+    })
     @POST("ai/create/api/v1/chats")
-    Observable<ApiResponse<NewChatData>> createChat(@Body NewChatRequest request);
+    Observable<ApiResponse<FuckNewChatData>> createChat(@Body NewChatRequest request);
 
 
 //    @POST("/ai/api/v1/chats_openai/{chatId}/chat/completions")
@@ -64,7 +68,8 @@ public interface ApiService {
     @Streaming
     @Headers({
             "accept: text/event-stream;charset=UTF-8",
-            "Content-Type: application/json"
+            "userId: u1001",
+            CONTENT_TYPE
     })
     @POST("ai/api/v1/chats_openai/{chatId}/chat/completions")
     Observable<ApiResponse<String>> streamChatCompletions(

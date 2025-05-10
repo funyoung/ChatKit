@@ -13,17 +13,15 @@ public class ApiClient {
     public static final long READ_TIMEOUT = Config.TIMEOUT_SHORT;
 
     private static Retrofit retrofit;
-    public static Retrofit getRetrofit() {
-        return getRetrofit(Config.TOKEN);
-    }
 
-    public static Retrofit getRetrofit(String apiToken) {
+    public static Retrofit getRetrofit(String apiToken, String userId) {
         if (retrofit == null) {
             //添加日志拦截器
             HttpLoggingInterceptor httpLoggingInterceptor = Config.LoggingInterceptor();
 
             //获取OkHttpClient
-            OkHttpClient client = Config.buildHttpClient(CONNECT_TIMEOUT, WRITE_TIMEOUT, READ_TIMEOUT, httpLoggingInterceptor, apiToken);
+            OkHttpClient client = Config.buildHttpClient(CONNECT_TIMEOUT, WRITE_TIMEOUT, READ_TIMEOUT,
+                    httpLoggingInterceptor, apiToken, userId);
 
             //初始化retrofit
             retrofit = Config.buildRetrofit(client);
@@ -76,11 +74,8 @@ public class ApiClient {
         return retrofit;
     }
 
-    public static  ApiService getService() {
-        return getService(Config.TOKEN);
-    }
-    public static  ApiService getService(String apiToken) {
-        return getRetrofit(apiToken).create(ApiService.class);
+    public static  ApiService getService(String apiToken, String userId) {
+        return getRetrofit(apiToken, userId).create(ApiService.class);
     }
 }
 

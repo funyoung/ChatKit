@@ -399,4 +399,9 @@ public class ChatMessagesActivity extends DemoMessagesActivity
     public void toast(String msg) {
         Toast.makeText(ChatMessagesActivity.this, msg, Toast.LENGTH_LONG).show();
     }
+
+    @Override
+    public void chatCompleted() {
+        // 本次聊天信息返送完成
+    }
 }
