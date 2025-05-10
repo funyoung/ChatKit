@@ -21,6 +21,8 @@ public class ChatSession {
     private static final String TAG = "ChatSession";
     private ApiService api = ApiClient.getService();
 
+    private String chatId = null;
+
     private String userId = null;
     private String datasetId = null;
 
@@ -68,10 +70,28 @@ public class ChatSession {
     }
 
     public void attach(String userId, String datasetId) {
+        Log.i(TAG, "attach: user: " + userId + ", dataset: " + datasetId + ", chatId: " + chatId);
+        if (null != userId && userId.equalsIgnoreCase(this.userId)
+                && null != datasetId && datasetId.equalsIgnoreCase(this.datasetId)) {
+            Log.i(TAG, "");
+            return;
+        }
+
         this.userId = userId;
         this.datasetId = datasetId;
-        Log.i(TAG, "attach: user: " + userId + ", dataset: " + datasetId);
+        this.chatId = null;
+
         loadChatList();
+    }
+
+    // 点击提交消息，判断存在当前chatId, 直接提交，否则先创建成功后，提交
+    public void submit(String msg) {
+        Log.i(TAG, "submit message: " + msg + ", for chatId: " + chatId + ", userId: " + userId + ", datasetId: " + datasetId);
+        if (null == chatId) {
+            // todo:create chat
+        } else {
+            // todo: sending chat.
+        }
     }
 }
 interface Listener {

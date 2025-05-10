@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -54,7 +55,7 @@ public class ChatMessagesActivity extends DemoMessagesActivity
 
     private String extraMessagePending = null;
 
-    private ChatSession session;
+    private ChatSession session = new ChatSession(this);
 
 
     public static void open(Context context) {
@@ -331,8 +332,13 @@ public class ChatMessagesActivity extends DemoMessagesActivity
 
     @Override
     public boolean onSubmit(CharSequence input) {
-        super.messagesAdapter.addToStart(
-                MessagesFixtures.getTextMessage(input.toString()), true);
+        String msg = input.toString();
+        if (null != msg) {
+            super.messagesAdapter.addToStart(
+                    MessagesFixtures.getTextMessage(input.toString()), true);
+
+            session.submit(msg);
+        }
         return true;
     }
 
@@ -381,6 +387,12 @@ public class ChatMessagesActivity extends DemoMessagesActivity
         super.messagesAdapter.enableSelectionMode(this);
         super.messagesAdapter.setLoadMoreListener(this);
         this.messagesList.setAdapter(super.messagesAdapter);
+    }
+
+    // 重载，不加载Mock消息。
+    @Override
+    public void onLoadMore(int page, int totalItemsCount) {
+        Log.i("TAG", "onLoadMore: " + page + " " + totalItemsCount);
     }
 
     @Override
