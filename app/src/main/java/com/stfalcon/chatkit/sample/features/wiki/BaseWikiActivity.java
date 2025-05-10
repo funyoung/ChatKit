@@ -40,7 +40,7 @@ public abstract class BaseWikiActivity extends AppCompatActivity
 
     protected abstract Observable<ApiResponse<AssignListData>> getWikiList(ApiService api);
 
-    private ApiService api = ApiClient.getApiService();
+    private ApiService api = ApiClient.getService();
 
     protected String getTitleStr() {
         return null;

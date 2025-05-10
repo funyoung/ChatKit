@@ -1,0 +1,21 @@
+package phos.fri.aiassistant.net;
+
+
+import io.reactivex.Observable;
+import okhttp3.MultipartBody;
+import phos.fri.aiassistant.entity.ApiResponse;
+import phos.fri.aiassistant.entity.OcrData;
+import retrofit2.http.Multipart;
+import retrofit2.http.POST;
+import retrofit2.http.Part;
+
+/**
+ * @author e13310@gmail.com
+ */
+public interface UploadService {
+    @Multipart
+    @POST("/parse")
+    Observable<ApiResponse<OcrData>> uploadFile(
+            @Part MultipartBody.Part filePart
+    );
+}

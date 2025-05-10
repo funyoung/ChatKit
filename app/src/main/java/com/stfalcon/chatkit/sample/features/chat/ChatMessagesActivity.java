@@ -87,11 +87,11 @@ public class ChatMessagesActivity extends DemoMessagesActivity
     private MessagesList messagesList;
     private MessageInput input;
 
-    private ApiService api = ApiClient.getApiService();
+    private ApiService api = ApiClient.getService();
 
     // 假设我们要第 1 页，每页 20 条
-    private void loadChatList() {
-        api.getChatList(Profile.userId, Profile.datasetId).subscribeOn(Schedulers.io())
+    private void loadChatList(String userId, String dataId) {
+        api.getChatList(userId, dataId).subscribeOn(Schedulers.io())
                 .compose(RxUtils.handleResponse())          // 业务 code 过滤
                 .compose(RxUtils.applySchedulers())         // 线程切换
                 .subscribe(new Observer<ChatListData>() {
@@ -156,7 +156,7 @@ public class ChatMessagesActivity extends DemoMessagesActivity
         super.onResume();
         postHandleExtraMessage();
 
-        loadChatList();
+        loadChatList(Profile.userId, Profile.datasetId);
     }
 
     @Override
