@@ -23,6 +23,7 @@ import com.developer.filepicker.controller.DialogSelectionListener;
 import com.developer.filepicker.model.DialogConfigs;
 import com.developer.filepicker.model.DialogProperties;
 import com.developer.filepicker.view.FilePickerDialog;
+import com.google.gson.Gson;
 import com.stfalcon.chatkit.messages.MessageHolders;
 import com.stfalcon.chatkit.messages.MessageInput;
 import com.stfalcon.chatkit.messages.MessagesList;
@@ -37,6 +38,7 @@ import com.stfalcon.chatkit.sample.features.demo.custom.media.holders.IncomingVo
 import com.stfalcon.chatkit.sample.features.demo.custom.media.holders.OutcomingVoiceMessageViewHolder;
 
 import java.io.File;
+import java.util.List;
 
 import phos.fri.aiassistant.settings.Profile;
 
@@ -113,8 +115,6 @@ public class ChatMessagesActivity extends DemoMessagesActivity
     protected void onResume() {
         super.onResume();
         postHandleExtraMessage();
-
-        //session.loadChatList(Profile.userId, Profile.datasetId);
     }
 
     @Override
@@ -407,5 +407,22 @@ public class ChatMessagesActivity extends DemoMessagesActivity
     @Override
     public void chatCompleted() {
         // 本次聊天信息返送完成
+    }
+
+    @Override
+    public void onChatResponded(List<String> completeJsons) {
+        String msg = new Gson().toJson(completeJsons);
+        toast("收到聊天结果：" + msg);
+        super.messagesAdapter.addToStart(MessagesFixtures.getTextMessage(msg, "ai-bolt"), true);
+    }
+
+    @Override
+    public void onChatAppended(String hex) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                messagesAdapter.addToStart(MessagesFixtures.getTextMessage(hex, "ai-bolt"), true);
+            }
+        });
     }
 }

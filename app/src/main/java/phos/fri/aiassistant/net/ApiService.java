@@ -2,15 +2,18 @@ package phos.fri.aiassistant.net;
 
 
 import io.reactivex.Observable;
+import okhttp3.ResponseBody;
 import phos.fri.aiassistant.entity.ApiResponse;
 import phos.fri.aiassistant.entity.AssignListData;
 import phos.fri.aiassistant.entity.ChatCompletionRequest;
 import phos.fri.aiassistant.entity.ChatListData;
+import phos.fri.aiassistant.entity.ChatRequest;
 import phos.fri.aiassistant.entity.FuckNewChatData;
 import phos.fri.aiassistant.entity.NewChatRequest;
 import phos.fri.aiassistant.entity.NewChatData;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -55,6 +58,26 @@ public interface ApiService {
     Observable<ApiResponse<FuckNewChatData>> createChat(@Body NewChatRequest request);
 
 
+    @POST("ai/api/v1/chats_openai/{chatId}/chat/completions")
+    @Headers({
+            "Content-Type: application/json",
+            "Accept: text/event-stream",
+            "Authorization: Bearer <your-token>"  // 替换为你的 token
+    })
+    Observable<ResponseBody> chatStream(
+            @Path("chatId") String chatId,
+            //@Header("Authorization") String authorization,
+            @Body ChatRequest request);
+//    @Headers({
+//            "Content-Type: application/json",
+//            "Accept: text/event-stream"  // 重要：声明接受SSE
+//    })
+//    @POST("chats_openai/{chatId}/chat/completions")
+//    Flowable<ResponseBody> streamChatCompletion(
+//            @Path("chatId") String chatId,
+//            @Header("Authorization") String authorization,
+//            @Body RequestBody body
+//    );
 //    @POST("/ai/api/v1/chats_openai/{chatId}/chat/completions")
 //    Observable<ApiResponse<NewChatData>> chatCompletion(@Body CreateChatRequest request);
 

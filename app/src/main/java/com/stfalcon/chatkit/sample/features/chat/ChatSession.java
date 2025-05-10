@@ -5,11 +5,23 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 
-import java.io.IOException;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import io.reactivex.Observable;
 import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.ResponseBody;
 import phos.fri.aiassistant.entity.ApiException;
 import phos.fri.aiassistant.entity.ChatListData;
 import phos.fri.aiassistant.entity.FuckNewChatData;
@@ -19,6 +31,8 @@ import phos.fri.aiassistant.net.AiHelper;
 import phos.fri.aiassistant.net.ApiClient;
 import phos.fri.aiassistant.net.RxUtils;
 import phos.fri.aiassistant.settings.Profile;
+
+import phos.fri.aiassistant.entity.ChatRequest;
 
 // 静态会话管理
 public class ChatSession {
@@ -117,7 +131,7 @@ public class ChatSession {
                             String msg = "创建chat成功：chatId: " + new Gson().toJson(data);
                             listener.toast(msg);
                             Log.i(TAG, msg);
-
+                            startChat(msg);
                         }
                         @Override
                         public void onError(Throwable e) {
@@ -139,11 +153,140 @@ public class ChatSession {
                     });
         } else {
             // todo: sending chat.
+            startChat(msg);
         }
     }
+
+    private Disposable disposable;
+    private void startChat(String msg) {
+        if (null == chatId) {
+            String tips = "无法聊天， chatId: " + chatId + ", datasetId: " + datasetId + ", msg: " + msg;
+            listener.toast(tips);
+            Log.e(TAG, tips);
+            return;
+        }
+
+        ChatRequest request = new ChatRequest(
+                "Qwen2.5-Coder-32B-Instruct",
+                Collections.singletonList(new ChatRequest.Message("user", "方芳被诈骗案情况")),
+                true
+        );
+
+        disposable = ApiClient.getService(Profile.token, userId).chatStream(chatId, request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.computation())
+                .flatMap(responseBody -> Observable.fromIterable(parseSSE(responseBody)))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        chunkJson -> {
+                            // 收到每段完整 JSON 字符串时回调
+                            Log.i("SSE", "完整 JSON: " + chunkJson);
+                        },
+                        throwable -> {
+                            Log.e("SSE", "流处理出错", throwable);
+                        },
+                        () -> {
+                            Log.i("SSE", "流接收完成");
+                        }
+                );
+    }
+
+    public void stopChat() {
+        if (disposable != null && !disposable.isDisposed()) {
+            disposable.dispose();
+        }
+    }
+
+    /**
+     * 将 ResponseBody 按 SSE 协议解析，输出一个完整 JSON 字符串的列表。
+     */
+    private List<String> parseSSE(ResponseBody body) throws IOException {
+        List<String> completeJsons = new ArrayList<>();
+        BufferedReader reader = new BufferedReader(
+                new InputStreamReader(body.byteStream(), StandardCharsets.UTF_8)
+        );
+        String line;
+        StringBuilder pending = new StringBuilder();
+        int retryCount = 0;
+
+        while ((line = reader.readLine()) != null) {
+            if (line.startsWith("data:")) {
+                String hex = line.substring(5).trim();
+                if (hex.startsWith("data:")) {
+                    hex = hex.substring(5).trim();
+                }
+
+                debugShow("read line: " + hex);
+                if (hex.isEmpty()) {
+                    continue;
+                }
+
+                if ("[DONE]".equals(hex)) {
+                    listener.onChatResponded(completeJsons);
+                    break;
+                }
+
+//                listener.onChatAppended(hex);
+
+                String fragment = new String(hexToBytes(hex), StandardCharsets.UTF_8);
+                debugShow("read fragment: " + fragment);
+                debugShow("completeJsons before: " + completeJsons);
+                if (isValidJson(fragment)) {
+                    // 如果是完整 JSON，直接加入列表
+                    completeJsons.add(fragment);
+                    pending.setLength(0);
+                    retryCount = 0;
+                } else {
+                    // 拼接缓存
+                    pending.append(fragment);
+                    if (isValidJson(pending.toString())) {
+                        completeJsons.add(pending.toString());
+                        pending.setLength(0);
+                        retryCount = 0;
+                    } else if (++retryCount > 3) {
+                        // 超过次数，清空缓存
+                        pending.setLength(0);
+                        retryCount = 0;
+                    }
+                }
+                debugShow("completeJsons after: " + completeJsons);
+                Log.d(TAG, "----------------------------------\n");
+            }
+        }
+        return completeJsons;
+    }
+
+    private void debugShow(String tips) {
+//        listener.toast(tips);
+        Log.i(TAG, tips);
+    }
+
+    private boolean isValidJson(String s) {
+        try {
+            new JSONObject(s);
+            return true;
+        } catch (JSONException e) {
+            return false;
+        }
+    }
+
+    private byte[] hexToBytes(String hex) {
+        int len = hex.length();
+        byte[] data = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            data[i / 2] = (byte) ((Character.digit(hex.charAt(i), 16) << 4)
+                    + Character.digit(hex.charAt(i+1), 16));
+        }
+        return data;
+    }
 }
+
 interface Listener {
     void toast(String msg);
 
     void chatCompleted();
+
+    void onChatResponded(List<String> completeJsons);
+
+    void onChatAppended(String hex);
 }

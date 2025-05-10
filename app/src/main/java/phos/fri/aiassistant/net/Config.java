@@ -94,6 +94,10 @@ public class Config {
             if (userId != null) {
                 builder.header("userId", userId);
             }
+            String url = request.url().toString();
+            if (url.endsWith("chat/completions")) {
+                builder.header("Accept", "text/event-stream");
+            }
             return chain.proceed(builder.build());
         }
     }
