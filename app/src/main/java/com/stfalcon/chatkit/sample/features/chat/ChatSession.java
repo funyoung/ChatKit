@@ -228,7 +228,8 @@ public class ChatSession {
 
 //                listener.onChatAppended(hex);
 
-                String fragment = new String(hexToBytes(hex), StandardCharsets.UTF_8);
+//                String fragment = new String(hexToBytes(hex), StandardCharsets.UTF_8);
+                String fragment = hexToText(hex);
                 debugShow("read fragment: " + fragment);
                 debugShow("completeJsons before: " + completeJsons);
                 if (isValidJson(fragment)) {
@@ -268,6 +269,17 @@ public class ChatSession {
         } catch (JSONException e) {
             return false;
         }
+    }
+
+    public static String hexToText(String hexString) {
+        hexString = hexString.replaceAll("\\s", ""); // 移除空格
+        byte[] bytes = new byte[hexString.length() / 2];
+        for (int i = 0; i < bytes.length; i++) {
+            int index = i * 2;
+            String hex = hexString.substring(index, index + 2);
+            bytes[i] = (byte) Integer.parseInt(hex, 16);
+        }
+        return new String(bytes, StandardCharsets.UTF_8);
     }
 
     private byte[] hexToBytes(String hex) {
