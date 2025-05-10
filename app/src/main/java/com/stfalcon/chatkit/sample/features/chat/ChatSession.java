@@ -144,6 +144,10 @@ public class ChatSession {
                         @Override
                         public void onNext(FuckNewChatData dataWrapper) {
                             NewChatData data = dataWrapper.getData();
+                            if (null == data) {
+                                debugShow(dataWrapper.getMessage(), dataWrapper);
+                                return;
+                            }
                             chatId = data.getChatId();
                             String msg = "创建chat成功：chatId: " + new Gson().toJson(data);
                             listener.toast(msg);
