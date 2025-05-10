@@ -60,11 +60,11 @@ public final class DialogsFixtures extends FixturesData {
                 getRandomBoolean());
     }
 
-//    private static Message getMessage(final Date date) {
-//        return new Message(
-//                getRandomId(),
-//                getUser(),
-//                getRandomMessage(),
-//                date);
-//    }
+    private static Message getMessage(final Date date) {
+        return new Message(
+                getRandomId(),
+                getUser(),
+                getRandomMessage(),
+                date);
+    }
 }

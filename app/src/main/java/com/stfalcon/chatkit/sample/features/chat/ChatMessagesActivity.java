@@ -38,6 +38,8 @@ import com.stfalcon.chatkit.sample.features.demo.custom.media.holders.OutcomingV
 
 import java.io.File;
 
+import phos.fri.aiassistant.settings.Profile;
+
 public class ChatMessagesActivity extends DemoMessagesActivity
         implements MessageInput.InputListener,
         MessageInput.AttachmentsListener,
@@ -90,14 +92,14 @@ public class ChatMessagesActivity extends DemoMessagesActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom_media_messages);
 
+        preHandleExtraMessage(getIntent());
+
         this.messagesList = findViewById(R.id.messagesList);
         initAdapter();
 
         input = findViewById(R.id.input);
         input.setInputListener(this);
         input.setAttachmentsListener(this);
-
-        preHandleExtraMessage(getIntent());
     }
 
     @Override
@@ -126,6 +128,11 @@ public class ChatMessagesActivity extends DemoMessagesActivity
 
     private void preHandleExtraMessage(Intent intent) {
         extraMessagePending = intent.getStringExtra(EXTRA_MESSAGE);
+
+        if (Schema.APP_WIKI.equalsIgnoreCase(extraMessagePending)) {
+            super.senderId = intent.getStringExtra("USER");
+            session.attach(super.senderId, getIntent().getStringExtra("DATA"));
+        }
     }
 
     private void postHandleExtraMessage() {
@@ -134,8 +141,6 @@ public class ChatMessagesActivity extends DemoMessagesActivity
             showFilePickerDialog();
         } else if (Schema.TOOL_TTS.equalsIgnoreCase(extraMessagePending)) {
             Toast.makeText(this, "TTS文字转语音功能即将上线，敬请期待。", Toast.LENGTH_SHORT).show();
-        } else if (Schema.APP_WIKI.equalsIgnoreCase(extraMessagePending)) {
-            session.attach(getIntent().getStringExtra("USER"), getIntent().getStringExtra("DATA"));
         } else {
             // nothing need to do.
         }
@@ -332,10 +337,9 @@ public class ChatMessagesActivity extends DemoMessagesActivity
 
     @Override
     public boolean onSubmit(CharSequence input) {
-        String msg = input.toString();
-        if (null != msg) {
-            super.messagesAdapter.addToStart(
-                    MessagesFixtures.getTextMessage(input.toString()), true);
+        if (null != input) {
+            String msg = input.toString();
+            super.messagesAdapter.addToStart(MessagesFixtures.getTextMessage(msg, Profile.userId), true);
 
             session.submit(msg);
         }

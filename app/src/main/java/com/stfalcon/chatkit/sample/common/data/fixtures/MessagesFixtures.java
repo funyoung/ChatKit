@@ -48,6 +48,10 @@ public final class MessagesFixtures extends FixturesData {
     public static Message getTextMessage(String text) {
         return new Message(getRandomId(), getUser(), text);
     }
+    public static Message getTextMessage(String text, String userId) {
+        return new Message(getRandomId(), getUser(userId), text);
+    }
+
 
     public static ArrayList<Message> getMessages(Date startDate) {
         ArrayList<Message> messages = new ArrayList<>();
@@ -77,6 +81,14 @@ public final class MessagesFixtures extends FixturesData {
         boolean even = rnd.nextBoolean();
         return new User(
                 even ? "0" : "1",
+                even ? names.get(0) : names.get(1),
+                even ? avatars.get(0) : avatars.get(1),
+                true);
+    }
+    private static User getUser(String userId) {
+        boolean even = rnd.nextBoolean();
+        return new User(
+                userId,
                 even ? names.get(0) : names.get(1),
                 even ? avatars.get(0) : avatars.get(1),
                 true);
