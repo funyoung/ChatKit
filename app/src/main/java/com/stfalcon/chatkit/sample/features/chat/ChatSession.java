@@ -29,6 +29,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import phos.fri.aiassistant.entity.ApiException;
+import phos.fri.aiassistant.entity.ChatCompletionChunk;
 import phos.fri.aiassistant.entity.ChatListData;
 import phos.fri.aiassistant.entity.FuckNewChatData;
 import phos.fri.aiassistant.entity.NewChatData;
@@ -76,22 +77,29 @@ public class ChatSession {
                     }
                     @Override
                     public void onError(Throwable e) {
-                        // 隐藏 loading
-                        if (e instanceof IOException) {
-                            // 网络错误提示
-                        } else if (e instanceof JsonParseException) {
-                            // 解析错误提示
-                        } else if (e instanceof ApiException) {
-                            // 业务错误提示：((ApiException)e).getMessage()
-                        } else {
-                            // 其他错误
-                        }
+                        handleApiError("loadChatList", e);
                     }
                     @Override
                     public void onComplete() {
                         // 隐藏 loading
                     }
                 });
+    }
+
+    private void handleApiError(String headline, Throwable e) {
+        e.printStackTrace();
+        Log.e(TAG, headline + e.getMessage());
+
+        // 隐藏 loading
+        if (e instanceof IOException) {
+            // 网络错误提示
+        } else if (e instanceof JsonParseException) {
+            // 解析错误提示
+        } else if (e instanceof ApiException) {
+            // 业务错误提示：((ApiException)e).getMessage()
+        } else {
+            // 其他错误
+        }
     }
 
     public void attach(String userId, String datasetId) {
@@ -144,16 +152,7 @@ public class ChatSession {
                         }
                         @Override
                         public void onError(Throwable e) {
-                            // 隐藏 loading
-                            if (e instanceof IOException) {
-                                // 网络错误提示
-                            } else if (e instanceof JsonParseException) {
-                                // 解析错误提示
-                            } else if (e instanceof ApiException) {
-                                // 业务错误提示：((ApiException)e).getMessage()
-                            } else {
-                                // 其他错误
-                            }
+                            handleApiError("loadChatList", e);
                         }
                         @Override
                         public void onComplete() {
@@ -175,30 +174,59 @@ public class ChatSession {
             return;
         }
 
+        // todo: 使用真实msg和chatId
+        String testMsg = "方芳被诈骗案情况"; // msg;
+        String testChatId = "d74002a42d4511f0b1990242ac170005"; // chatId;
+
         ChatRequest request = new ChatRequest(
                 "Qwen2.5-Coder-32B-Instruct",
-                Collections.singletonList(new ChatRequest.Message("user", "方芳被诈骗案情况")),
+                Collections.singletonList(new ChatRequest.Message("user", testMsg)),
                 true
         );
 
-        String testChatId = "d74002a42d4511f0b1990242ac170005"; // chatId;
         disposable = ApiClient.getService(Profile.token, userId).chatStream(testChatId, request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.computation())
                 .flatMap(responseBody -> Observable.fromIterable(parseSSE(responseBody)))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        chunkJson -> {
-                            // 收到每段完整 JSON 字符串时回调
-                            Log.i("SSE", "完整 JSON: " + chunkJson);
-                        },
-                        throwable -> {
-                            Log.e("SSE", "流处理出错", throwable);
-                        },
-                        () -> {
-                            Log.i("SSE", "流接收完成");
-                        }
+                        chunkJson -> onChatJsonAppend(chunkJson),
+                        throwable -> onChatError(throwable),
+                        () -> onChatCompleted()
                 );
+    }
+
+    private void onChatCompleted() {
+        Log.i("SSE", "流接收完成");
+        listener.onChatFinish();
+    }
+
+    private void onChatError(Throwable throwable) {
+        Log.e("SSE", "流处理出错", throwable);
+        listener.onChatError(throwable.getMessage());
+    }
+
+    private void onChatJsonAppend(String chunkJson) {
+        // 收到每段完整 JSON 字符串时回调
+        Log.i("SSE", "完整 JSON: " + chunkJson);
+        ChatCompletionChunk chunk = new Gson().fromJson(chunkJson, ChatCompletionChunk.class);
+        if (null != chunk) {
+            String id = chunk.getId();
+            String content = null;
+            String finishReason = null;
+            List<ChatCompletionChunk.Choice> choiceList = chunk.getChoices();
+            if (null != choiceList && !choiceList.isEmpty()) {
+                ChatCompletionChunk.Choice choice = choiceList.get(0);
+                if (null != choice) {
+                    finishReason = choice.getFinishReason();
+                    ChatCompletionChunk.Delta delta = choice.getDelta();
+                    if (null != delta) {
+                        content = delta.getContent();
+                    }
+                }
+            }
+            listener.onChatUpdate(id, content, finishReason);
+        }
     }
 
     public void stopChat() {
@@ -321,30 +349,20 @@ public class ChatSession {
 //            );
             UploadClient.getService(Profile.token, Profile.userId).uploadFile(body)
                     .subscribeOn(Schedulers.io())
-                    .compose(RxUtils.handleResponse())          // 业务 code 过滤
+//                    .compose(RxUtils.handleResponse())          // 业务 code 过滤
                     .compose(RxUtils.applySchedulers())         // 线程切换
-                    .subscribe(new Observer<OcrData>() {
+                    .subscribe(new Observer<ResponseBody>() {
                         @Override
                         public void onSubscribe(Disposable d) {
                             // 显示 loading
                         }
                         @Override
-                        public void onNext(OcrData data) {
+                        public void onNext(ResponseBody data) {
                             debugShow("", data);
                         }
                         @Override
                         public void onError(Throwable e) {
-                            e.printStackTrace();
-                            // 隐藏 loading
-                            if (e instanceof IOException) {
-                                // 网络错误提示
-                            } else if (e instanceof JsonParseException) {
-                                // 解析错误提示
-                            } else if (e instanceof ApiException) {
-                                // 业务错误提示：((ApiException)e).getMessage()
-                            } else {
-                                // 其他错误
-                            }
+                            handleApiError("loadChatList", e);
                         }
                         @Override
                         public void onComplete() {
@@ -373,4 +391,10 @@ interface Listener {
     void onChatResponded(List<String> completeJsons);
 
     void onChatAppended(String hex);
+
+    void onChatUpdate(String id, String content, String finishReason);
+
+    void onChatFinish();
+
+    void onChatError(String message);
 }

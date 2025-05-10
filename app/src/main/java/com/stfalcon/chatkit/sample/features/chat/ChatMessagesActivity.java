@@ -431,4 +431,33 @@ public class ChatMessagesActivity extends DemoMessagesActivity
             }
         });
     }
+
+    private String pendingChatMessage = null;
+    @Override
+    public void onChatUpdate(String id, String content, String finishReason) {
+        toast("onChatUpdate: " + id + ", " + content + ", " + finishReason);
+        if (null == finishReason && null != content) {
+            if (null == pendingChatMessage) {
+                pendingChatMessage = content;
+                messagesAdapter.addToStart(MessagesFixtures.getTextMessage(pendingChatMessage, "ai-bolt"), true);
+            } else {
+                messagesAdapter.updateToStart(pendingChatMessage, true);
+                messagesList.scrollToPosition(0);
+            }
+        } else if (null != finishReason) {
+            onChatFinish();
+        }
+    }
+
+    @Override
+    public void onChatFinish() {
+        toast("onChatFinish");
+        pendingChatMessage = null;
+    }
+
+    @Override
+    public void onChatError(String message) {
+        toast("onChatError: " + message);
+        pendingChatMessage = null;
+    }
 }

@@ -3,6 +3,7 @@ package phos.fri.aiassistant.net;
 
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
+import okhttp3.ResponseBody;
 import phos.fri.aiassistant.entity.ApiResponse;
 import phos.fri.aiassistant.entity.OcrData;
 import retrofit2.http.Multipart;
@@ -15,7 +16,7 @@ import retrofit2.http.Part;
 public interface UploadService {
     @Multipart
     @POST("ai/api/ocr2/parse")
-    Observable<ApiResponse<OcrData>> uploadFile(
+    Observable<ResponseBody> uploadFile(
             @Part MultipartBody.Part filePart
     );
 }

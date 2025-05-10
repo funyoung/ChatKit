@@ -162,6 +162,21 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
         }
     }
 
+    public void updateToStart(String text, boolean scroll) {
+        if (!items.isEmpty()) {
+            MESSAGE message = (MESSAGE)items.get(0).item;
+            if (!message.updateText(text)) {
+                return;
+            }
+        }
+
+        notifyItemRangeInserted(0, 1);
+        if (layoutManager != null && scroll) {
+            layoutManager.scrollToPosition(0);
+        }
+    }
+
+
     /**
      * Adds messages list in chronological order. Use this method to add history.
      *

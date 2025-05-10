@@ -43,6 +43,21 @@ public class Message implements IMessage,
     }
 
     @Override
+    public boolean updateText(String text) {
+        if (null == text && this.text == null) {
+            return false;
+        }
+
+        if (null != text && text.equals(this.text)) {
+            return false;
+        }
+
+        this.text = text;
+
+        return true;
+    }
+
+    @Override
     public Date getCreatedAt() {
         return createdAt;
     }

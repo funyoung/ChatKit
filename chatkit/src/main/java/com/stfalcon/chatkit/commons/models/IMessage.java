@@ -37,6 +37,8 @@ public interface IMessage {
      */
     String getText();
 
+    boolean updateText(String text);
+
     /**
      * Returns message author. See the {@link IUser} for more details
      *
