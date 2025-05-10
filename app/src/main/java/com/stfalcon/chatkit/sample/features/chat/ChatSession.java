@@ -172,7 +172,8 @@ public class ChatSession {
                 true
         );
 
-        disposable = ApiClient.getService(Profile.token, userId).chatStream(chatId, request)
+        String testChatId = "d74002a42d4511f0b1990242ac170005"; // chatId;
+        disposable = ApiClient.getService(Profile.token, userId).chatStream(testChatId, request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.computation())
                 .flatMap(responseBody -> Observable.fromIterable(parseSSE(responseBody)))
