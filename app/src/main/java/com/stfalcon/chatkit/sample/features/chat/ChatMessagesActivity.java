@@ -12,6 +12,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -123,6 +125,29 @@ public class ChatMessagesActivity extends DemoMessagesActivity
             extraMessagePending = null;
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.chat_session_menu, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_new:
+                resetSession();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void resetSession() {
+        // todo: clear and empty activity
+        toast("新的对话");
+    }
+
 
     private void preHandleExtraMessage(Intent intent) {
         extraMessagePending = intent.getStringExtra(EXTRA_MESSAGE);
