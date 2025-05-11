@@ -52,6 +52,10 @@ public final class MessagesFixtures extends FixturesData {
         return new Message(getRandomId(), getUser(userId), text);
     }
 
+    public static Message getAiTextMessage(String text) {
+        return getTextMessage(text, "ai-bolt");
+    }
+
 
     public static ArrayList<Message> getMessages(Date startDate) {
         ArrayList<Message> messages = new ArrayList<>();

@@ -394,8 +394,8 @@ public class ChatMessagesActivity extends DemoMessagesActivity
 
 
         super.messagesAdapter = new MessagesListAdapter<>(super.senderId, holders, super.imageLoader);
-        super.messagesAdapter.enableSelectionMode(this);
-        super.messagesAdapter.setLoadMoreListener(this);
+//        super.messagesAdapter.enableSelectionMode(this);
+//        super.messagesAdapter.setLoadMoreListener(this);
         this.messagesList.setAdapter(super.messagesAdapter);
     }
 
@@ -426,12 +426,12 @@ public class ChatMessagesActivity extends DemoMessagesActivity
         // 本次聊天信息返送完成
     }
 
-    @Override
-    public void onChatResponded(List<String> completeJsons) {
-        String msg = new Gson().toJson(completeJsons);
-        toast("收到聊天结果：" + msg);
-        super.messagesAdapter.addToStart(MessagesFixtures.getTextMessage(msg, "ai-bolt"), true);
-    }
+//    @Override
+//    public void onChatResponded(List<String> completeJsons) {
+//        String msg = new Gson().toJson(completeJsons);
+//        toast("收到聊天结果：" + msg);
+//        super.messagesAdapter.addToStart(MessagesFixtures.getTextMessage(msg, "ai-bolt"), true);
+//    }
 
     @Override
     public void onChatAppended(String hex) {
@@ -452,7 +452,7 @@ public class ChatMessagesActivity extends DemoMessagesActivity
         if (null != content) {
             if (0 == pendingChatMessage.length()) {
                 pendingChatMessage.append(content);
-                messagesAdapter.addToStart(MessagesFixtures.getTextMessage(pendingChatMessage.toString(), "ai-bolt"), true);
+                messagesAdapter.addToStart(MessagesFixtures.getAiTextMessage(pendingChatMessage.toString()), true);
             } else {
                 if (null != finishReason /*"stop".equalsIgnoreCase(finishReason)*/) {
                     if (!content.equals(pendingChatMessage.toString())) {

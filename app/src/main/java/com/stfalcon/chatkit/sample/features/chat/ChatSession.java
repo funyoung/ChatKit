@@ -259,7 +259,7 @@ public class ChatSession {
                 }
 
                 if ("[DONE]".equals(hex)) {
-                    listener.onChatResponded(completeJsons);
+//                    listener.onChatResponded(completeJsons);
                     break;
                 }
 
@@ -398,6 +398,26 @@ public class ChatSession {
                         String msg = new Gson().toJson(data);
                         listener.toast(msg);
                         //Toast.makeText(ChatMessagesActivity.this, msg, Toast.LENGTH_LONG).show();
+                        String summary = null;
+                        String finishReason = null;
+                        if (null != data && null != data.choices) {
+                            if (!data.choices.isEmpty()) {
+                                OcrChatData.Choice choice = data.choices.get(0);
+                                if (null != choice) {
+                                    finishReason = choice.finishReason;
+                                    OcrChatData.Message message = choice.message;
+                                    if (null != message) {
+                                        summary = message.content;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (null == summary) {
+                            listener.onChatError("服务忙，暂时没有总结结果。");
+                        } else {
+                            listener.onChatUpdate(null, summary, finishReason);
+                        }
                     }
                     @Override
                     public void onError(Throwable e) {
@@ -425,7 +445,7 @@ interface Listener {
 
     void chatCompleted();
 
-    void onChatResponded(List<String> completeJsons);
+//    void onChatResponded(List<String> completeJsons);
 
     void onChatAppended(String hex);
 
