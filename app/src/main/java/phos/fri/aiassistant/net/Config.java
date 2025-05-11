@@ -102,7 +102,7 @@ public class Config {
                 }
             }
 
-            if (url.endsWith("chat/completions")) {
+            if (url.endsWith("chat/completions") && url.contains("ai/api/v1/chats_openai/")) {
                 builder.header("Accept", "text/event-stream");
             }
             return chain.proceed(builder.build());

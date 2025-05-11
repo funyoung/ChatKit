@@ -399,6 +399,7 @@ public class ChatMessagesActivity extends DemoMessagesActivity
         this.messagesList.setAdapter(super.messagesAdapter);
     }
 
+    private Toast lastToast;
     // 重载，不加载Mock消息。
     @Override
     public void onLoadMore(int page, int totalItemsCount) {
@@ -407,7 +408,17 @@ public class ChatMessagesActivity extends DemoMessagesActivity
 
     @Override
     public void toast(String msg) {
-        Toast.makeText(ChatMessagesActivity.this, msg, Toast.LENGTH_LONG).show();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (null != lastToast) {
+                    lastToast.cancel();
+                }
+
+                lastToast = Toast.makeText(ChatMessagesActivity.this, msg, Toast.LENGTH_LONG);
+                lastToast.show();
+            }
+        });
     }
 
     @Override

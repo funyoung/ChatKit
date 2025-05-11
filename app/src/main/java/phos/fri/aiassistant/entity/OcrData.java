@@ -7,7 +7,6 @@ import java.util.List;
 
 public class OcrData {
     private Result result;
-
     public Result getResult() {
         return result;
     }
@@ -16,70 +15,243 @@ public class OcrData {
         this.result = result;
     }
 
-    public String parseContent() {
-        if (null != result) {
-            return result.concatContent();
-        }
-        return null;
-    }
-
-    public static class Result {
-        @SerializedName("page_contents")
-        private List<PageContent> contentList;
-
-        public List<PageContent> getContentList() {
-            return contentList;
+    public String getOcrText() {
+        if (null == result) {
+            return null;
         }
 
-        public void setContentList(List<PageContent> contentList) {
-            this.contentList = contentList;
+        List<PageContent> contentList = result.getPageContents();
+        if (null == contentList) {
+            return null;
         }
 
-        public String concatContent() {
-            if (null != contentList && !contentList.isEmpty()) {
-                StringBuilder sb = new StringBuilder();
-                for (PageContent content: contentList) {
-                    List<PageLayout> layoutList = null == content ? Collections.emptyList() : content.getLayoutList();
-                    if (null != layoutList) {
-                        for (PageLayout layout : layoutList) {
-                            String text = null == layout ? null : layout.getText();
+        StringBuilder stringBuilder = new StringBuilder();
+        for (PageContent content : contentList) {
+            if (null != content) {
+                List<PageLayout> layoutList = content.getPageLayouts();
+                if (null != layoutList) {
+                    for (PageLayout layout : layoutList) {
+                        if (null != layout) {
+                            String text = layout.getText();
                             if (null != text) {
-                                sb.append(text);
+                                stringBuilder.append(text);
                             }
                         }
                     }
                 }
-                return sb.toString();
             }
-            return null;
+        }
+        return stringBuilder.length() > 0 ? stringBuilder.toString() : null;
+    }
+
+    public static class Result {
+        @SerializedName("para_node_tree")
+        private List<ParaNode> paraNodeTree;
+
+        @SerializedName("pdf_data")
+        private String pdfData;
+        @SerializedName("page_contents")
+        private List<PageContent> pageContents;
+
+        public String getPdfData() {
+            return pdfData;
+        }
+
+        public void setPdfData(String pdfData) {
+            this.pdfData = pdfData;
+        }
+
+        public List<PageContent> getPageContents() {
+            return pageContents;
+        }
+
+        public void setPageContents(List<PageContent> pageContents) {
+            this.pageContents = pageContents;
+        }
+
+        public List<ParaNode> getParaNodeTree() {
+            return paraNodeTree;
+        }
+
+        public void setParaNodeTree(List<ParaNode> paraNodeTree) {
+            this.paraNodeTree = paraNodeTree;
+        }
+    }
+
+    public static class ParaNode {
+        private Integer parent;
+        private List<Integer> children;
+        @SerializedName("para_type")
+        private String paraType;
+        private String text;
+        private List<Position> position;
+        private Object table;
+        @SerializedName("node_id")
+        private int nodeId;
+
+        public Integer getParent() {
+            return parent;
+        }
+
+        public void setParent(Integer parent) {
+            this.parent = parent;
+        }
+
+        public List<Integer> getChildren() {
+            return children;
+        }
+
+        public void setChildren(List<Integer> children) {
+            this.children = children;
+        }
+
+        public String getParaType() {
+            return paraType;
+        }
+
+        public void setParaType(String paraType) {
+            this.paraType = paraType;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public void setText(String text) {
+            this.text = text;
+        }
+
+        public List<Position> getPosition() {
+            return position;
+        }
+
+        public void setPosition(List<Position> position) {
+            this.position = position;
+        }
+
+        public Object getTable() {
+            return table;
+        }
+
+        public void setTable(Object table) {
+            this.table = table;
+        }
+
+        public int getNodeId() {
+            return nodeId;
+        }
+
+        public void setNodeId(int nodeId) {
+            this.nodeId = nodeId;
+        }
+    }
+
+    public static class Position {
+        @SerializedName("page_num")
+        private int pageNum;
+        private List<Integer> box;
+
+        public int getPageNum() {
+            return pageNum;
+        }
+
+        public void setPageNum(int pageNum) {
+            this.pageNum = pageNum;
+        }
+
+        public List<Integer> getBox() {
+            return box;
+        }
+
+        public void setBox(List<Integer> box) {
+            this.box = box;
         }
     }
 
     public static class PageContent {
+        @SerializedName("page_type")
+        private String pageType;
+        @SerializedName("page_angle")
+        private int pageAngle;
+        @SerializedName("page_num")
+        private int pageNum;
         @SerializedName("page_layouts")
-        private List<PageLayout> layoutList;
+        private List<PageLayout> pageLayouts;
+        private List<String> titles;
+        @SerializedName("page_width")
+        private int pageWidth;
+        @SerializedName("page_height")
+        private int pageHeight;
 
-        public List<PageLayout> getLayoutList() {
-            return layoutList;
+        public String getPageType() {
+            return pageType;
         }
 
-        public void setLayoutList(List<PageLayout> layoutList) {
-            this.layoutList = layoutList;
+        public void setPageType(String pageType) {
+            this.pageType = pageType;
+        }
+
+        public int getPageAngle() {
+            return pageAngle;
+        }
+
+        public void setPageAngle(int pageAngle) {
+            this.pageAngle = pageAngle;
+        }
+
+        public int getPageNum() {
+            return pageNum;
+        }
+
+        public void setPageNum(int pageNum) {
+            this.pageNum = pageNum;
+        }
+
+        public List<PageLayout> getPageLayouts() {
+            return pageLayouts;
+        }
+
+        public void setPageLayouts(List<PageLayout> pageLayouts) {
+            this.pageLayouts = pageLayouts;
+        }
+
+        public List<String> getTitles() {
+            return titles;
+        }
+
+        public void setTitles(List<String> titles) {
+            this.titles = titles;
+        }
+
+        public int getPageWidth() {
+            return pageWidth;
+        }
+
+        public void setPageWidth(int pageWidth) {
+            this.pageWidth = pageWidth;
+        }
+
+        public int getPageHeight() {
+            return pageHeight;
+        }
+
+        public void setPageHeight(int pageHeight) {
+            this.pageHeight = pageHeight;
         }
     }
 
     public static class PageLayout {
-        @SerializedName("node_id")
-        private Integer id;
-        private String type;
         private String text;
+        private String type;
+        @SerializedName("node_id")
+        private int nodeId;
 
-        public Integer getId() {
-            return id;
+        public String getText() {
+            return text;
         }
 
-        public void setId(Integer id) {
-            this.id = id;
+        public void setText(String text) {
+            this.text = text;
         }
 
         public String getType() {
@@ -90,13 +262,14 @@ public class OcrData {
             this.type = type;
         }
 
-        public String getText() {
-            return text;
+        public int getNodeId() {
+            return nodeId;
         }
 
-        public void setText(String text) {
-            this.text = text;
+        public void setNodeId(int nodeId) {
+            this.nodeId = nodeId;
         }
     }
 }
+
 

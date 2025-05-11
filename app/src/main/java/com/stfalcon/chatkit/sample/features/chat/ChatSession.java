@@ -13,10 +13,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -35,6 +33,7 @@ import phos.fri.aiassistant.entity.FuckNewChatData;
 import phos.fri.aiassistant.entity.NewChatData;
 import phos.fri.aiassistant.entity.NewChatRequest;
 import phos.fri.aiassistant.entity.OcrChatData;
+import phos.fri.aiassistant.entity.OcrData;
 import phos.fri.aiassistant.net.AiHelper;
 import phos.fri.aiassistant.net.ApiClient;
 import phos.fri.aiassistant.net.RxUtils;
@@ -296,7 +295,7 @@ public class ChatSession {
     }
 
     private void debugShow(String tips) {
-//        listener.toast(tips);
+        listener.toast(tips);
         Log.i(TAG, tips);
     }
 
@@ -347,20 +346,24 @@ public class ChatSession {
                     file.getName(),
                     requestFile
             );
-            UploadClient.getService(Profile.token, Profile.userId).uploadFile(body)
+            UploadClient.getService(Profile.token, Profile.userId).uploadOcrFile(body)
                     .subscribeOn(Schedulers.io())
-//                    .compose(RxUtils.handleResponse())          // 业务 code 过滤
+                    .compose(RxUtils.handleResponse())          // 业务 code 过滤
                     .compose(RxUtils.applySchedulers())         // 线程切换
-                    .subscribe(new Observer<ResponseBody>() {
+                    .subscribe(new Observer<OcrData>() {
                         @Override
                         public void onSubscribe(Disposable d) {
                             // 显示 loading
                         }
                         @Override
-                        public void onNext(ResponseBody data) {
+                        public void onNext(OcrData data) {
                             debugShow("", data);
                             String prompt = "你是文档总结助手，请用户输入内容";
                             String testContent = new Gson().toJson(data);
+                            if (null != data) {
+                                testContent = data.getOcrText();
+                                debugShow(testContent);
+                            }
                             performOcrSummary(prompt, testContent);
                         }
                         @Override
