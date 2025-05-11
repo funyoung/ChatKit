@@ -23,7 +23,6 @@ import com.developer.filepicker.controller.DialogSelectionListener;
 import com.developer.filepicker.model.DialogConfigs;
 import com.developer.filepicker.model.DialogProperties;
 import com.developer.filepicker.view.FilePickerDialog;
-import com.google.gson.Gson;
 import com.stfalcon.chatkit.messages.MessageHolders;
 import com.stfalcon.chatkit.messages.MessageInput;
 import com.stfalcon.chatkit.messages.MessagesList;
@@ -38,7 +37,6 @@ import com.stfalcon.chatkit.sample.features.demo.custom.media.holders.IncomingVo
 import com.stfalcon.chatkit.sample.features.demo.custom.media.holders.OutcomingVoiceMessageViewHolder;
 
 import java.io.File;
-import java.util.List;
 
 import phos.fri.aiassistant.settings.Profile;
 
@@ -384,6 +382,9 @@ public class ChatMessagesActivity extends DemoMessagesActivity
 
     private void initAdapter() {
         MessageHolders holders = new MessageHolders()
+                .setIncomingTextConfig(
+                        MarkdownIncomingTextMessageViewHolder.class,
+                        R.layout.item_markdown_incoming_text_message)
                 .registerContentType(
                         CONTENT_TYPE_VOICE,
                         IncomingVoiceMessageViewHolder.class,

@@ -763,8 +763,13 @@ public class MessageHolders {
             }
 
             if (text != null) {
-                text.setText(message.getText());
+                onBindText(text, message.getText());
+//                text.setText(message.getText());
             }
+        }
+
+        protected void onBindText(TextView textView, String content) {
+            textView.setText(content);
         }
 
         @Override
@@ -1038,7 +1043,7 @@ public class MessageHolders {
             extends BaseMessageViewHolder<MESSAGE> implements DefaultMessageViewHolder {
 
         protected TextView time;
-        protected ImageView userAvatar;
+//        protected ImageView userAvatar;
 
         @Deprecated
         public BaseIncomingMessageViewHolder(View itemView) {
@@ -1057,16 +1062,16 @@ public class MessageHolders {
                 time.setText(DateFormatter.format(message.getCreatedAt(), DateFormatter.Template.TIME));
             }
 
-            if (userAvatar != null) {
-                boolean isAvatarExists = imageLoader != null
-                        && message.getUser().getAvatar() != null
-                        && !message.getUser().getAvatar().isEmpty();
-
-                userAvatar.setVisibility(isAvatarExists ? View.VISIBLE : View.GONE);
-                if (isAvatarExists) {
-                    imageLoader.loadImage(userAvatar, message.getUser().getAvatar(), null);
-                }
-            }
+//            if (userAvatar != null) {
+//                boolean isAvatarExists = imageLoader != null
+//                        && message.getUser().getAvatar() != null
+//                        && !message.getUser().getAvatar().isEmpty();
+//
+//                userAvatar.setVisibility(isAvatarExists ? View.VISIBLE : View.GONE);
+//                if (isAvatarExists) {
+//                    imageLoader.loadImage(userAvatar, message.getUser().getAvatar(), null);
+//                }
+//            }
         }
 
         @Override
@@ -1077,16 +1082,16 @@ public class MessageHolders {
                 time.setTypeface(time.getTypeface(), style.getIncomingTimeTextStyle());
             }
 
-            if (userAvatar != null) {
-                userAvatar.getLayoutParams().width = style.getIncomingAvatarWidth();
-                userAvatar.getLayoutParams().height = style.getIncomingAvatarHeight();
-            }
+//            if (userAvatar != null) {
+//                userAvatar.getLayoutParams().width = style.getIncomingAvatarWidth();
+//                userAvatar.getLayoutParams().height = style.getIncomingAvatarHeight();
+//            }
 
         }
 
         private void init(View itemView) {
             time = itemView.findViewById(R.id.messageTime);
-            userAvatar = itemView.findViewById(R.id.messageUserAvatar);
+//            userAvatar = itemView.findViewById(R.id.messageUserAvatar);
         }
     }
 
