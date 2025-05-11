@@ -18,13 +18,18 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.developer.filepicker.controller.DialogSelectionListener;
 import com.developer.filepicker.model.DialogConfigs;
 import com.developer.filepicker.model.DialogProperties;
 import com.developer.filepicker.view.FilePickerDialog;
+import com.google.android.material.navigation.NavigationView;
 import com.stfalcon.chatkit.messages.MessageHolders;
 import com.stfalcon.chatkit.messages.MessageInput;
 import com.stfalcon.chatkit.messages.MessagesList;
@@ -102,6 +107,36 @@ public class ChatMessagesActivity extends DemoMessagesActivity
         input = findViewById(R.id.input);
         input.setInputListener(this);
         input.setAttachmentsListener(this);
+
+        createDrawerMenu();
+    }
+
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle toggle;
+    private NavigationView navView;
+    private void createDrawerMenu() {
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navView = findViewById(R.id.navigation_view);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        // 同步 Toolbar 和 Drawer 状态
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
+                R.string.open_drawer, R.string.close_drawer);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        // 菜单点击事件
+        navView.setNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.nav_home:
+                    // 加载首页 Fragment
+                    break;
+                // ... 其它菜单项处理
+            }
+            drawerLayout.closeDrawer(GravityCompat.START);
+            return true;
+        });
     }
 
     @Override
