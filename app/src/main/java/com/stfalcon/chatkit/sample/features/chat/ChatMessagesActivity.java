@@ -476,12 +476,12 @@ public class ChatMessagesActivity extends DemoMessagesActivity
     @Override
     public void onChatFinish() {
         toast("onChatFinish");
-        pendingChatMessage = null;
+        pendingChatMessage.setLength(0);
     }
 
     @Override
     public void onChatError(String message) {
         toast("onChatError: " + message);
-        pendingChatMessage = null;
+        pendingChatMessage.setLength(0);
     }
 }

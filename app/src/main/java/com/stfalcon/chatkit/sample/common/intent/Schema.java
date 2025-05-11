@@ -79,6 +79,15 @@ public class Schema {
     public static final String PMOS_ACTION_LIVEFACE = "phos.fri.aiassistant.ACTION.FACE_QUERY";
     public static final String PMOS_ACTION_IDREAD = "phos.fri.aiassistant.ACTION.ID_READ";
 
+    public static final String PMOS_ACTION_WIKI_MINE = "phos.fri.aiassistant.ACTION.WIKI_MINE";
+    public static final String PMOS_ACTION_WIKI_TEAM = "phos.fri.aiassistant.ACTION.WIKI_TEAM";
+    public static final String PMOS_ACTION_WIKI_LAW = "phos.fri.aiassistant.ACTION.WIKI_LAW";
+    public static final String PMOS_ACTION_SERVICE_DOC_SUMMARY = "phos.fri.aiassistant.ACTION.SERVICE_DOC_SUMMARY";
+    public static final String PMOS_ACTION_SERVICE_OCR = "phos.fri.aiassistant.ACTION.SERVICE_OCR";
+    public static final String PMOS_ACTION_SERVICE_TTS = "phos.fri.aiassistant.ACTION.SERVICE_TTS";
+    public static final String PMOS_ACTION_SERVICE_TRANSLATION = "phos.fri.aiassistant.ACTION.SERVICE_TRANSLATION";
+    public static final String PMOS_ACTION_SERVICE_MORE = "phos.fri.aiassistant.ACTION.SERVICE_MORE";
+
     // phos.fri.aiassistant
     public static final String APP_WIKI = "wiki";  // 知识库
     public static final String APP_PMOS = "pmos";  // 人像核验和身份证

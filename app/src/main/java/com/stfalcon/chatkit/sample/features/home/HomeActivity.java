@@ -6,12 +6,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.stfalcon.chatkit.sample.R;
 import com.stfalcon.chatkit.sample.common.intent.IntentUtil;
 import com.stfalcon.chatkit.sample.common.intent.Schema;
+import com.stfalcon.chatkit.sample.features.chat.ChatMessagesActivity;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -20,7 +22,9 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        handleIntent(getIntent());
+        if (handleIntent(getIntent())) {
+            return;
+        }
 
         // 为功能按钮设置点击事件
         setFeatureButtonClickListener(R.id.hi_chat, "点我聊天");
@@ -39,15 +43,22 @@ public class HomeActivity extends AppCompatActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent); // 更新当前Intent
-        handleIntent(intent);
-    }
-    private void handleIntent(Intent intent) {
-        if (Intent.ACTION_VIEW.equals(intent.getAction())) {
-            Uri uri = intent.getData();
-            if (IntentUtil.handleIntent(this, uri)) {
-                finish();
-            }
+        if (handleIntent(intent)) {
+            return;
         }
+    }
+    private boolean handleIntent(Intent intent) {
+//        if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+//            Uri uri = intent.getData();
+//            if (IntentUtil.handleIntent(this, uri)) {
+//                finish();
+//            }
+//        }
+        if (IntentUtil.handleIntentAction(this, intent.getAction())) {
+            finish();
+            return true;
+        }
+        return false;
     }
     private void setFeatureButtonClickListener(int viewId, String featureName) {
         findViewById(viewId).setOnClickListener(new View.OnClickListener() {
@@ -82,43 +93,60 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-    private void dispatch(String schema, String path) {
-        IntentUtil.dispatch(this, schema, path);
+//    private void dispatch(String schema, String path) {
+//        IntentUtil.dispatch(this, schema, path);
+//    }
+    private void dispatchAction(String action) {
+        try {
+            startActivity(new Intent(action));
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "目标应用未安装:" + action, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void showMore() {
-        dispatch(Schema.APP_TOOL, Schema.TOOL_MORE);
+//        dispatch(Schema.APP_TOOL, Schema.TOOL_MORE);
+        dispatchAction(Schema.PMOS_ACTION_SERVICE_MORE);
     }
 
     private void showTts() {
-        dispatch(Schema.APP_TOOL, Schema.TOOL_TTS);
+//        dispatch(Schema.APP_TOOL, Schema.TOOL_TTS);
+        dispatchAction(Schema.PMOS_ACTION_SERVICE_TTS);
     }
 
     private void showOcr() {
-        dispatch(Schema.APP_TOOL, Schema.TOOL_OCR);
+//        dispatch(Schema.APP_TOOL, Schema.TOOL_OCR);
+        dispatchAction(Schema.PMOS_ACTION_SERVICE_OCR);
     }
 
     private void showChat() {
-        dispatch(Schema.APP_WIKI, Schema.WIKI_CHAT);
+//        dispatch(Schema.APP_WIKI, Schema.WIKI_CHAT);
+//        ChatMessagesActivity.open(this);
     }
 
     private void showLawConsult() {
-        dispatch(Schema.APP_WIKI, Schema.WIKI_PUBLIC);
+//        dispatch(Schema.APP_WIKI, Schema.WIKI_PUBLIC);
+        dispatchAction(Schema.PMOS_ACTION_WIKI_LAW);
     }
 
     private void showSharedWiki() {
-        dispatch(Schema.APP_WIKI, Schema.WIKI_TEAM);
+//        dispatch(Schema.APP_WIKI, Schema.WIKI_TEAM);
+        dispatchAction(Schema.PMOS_ACTION_WIKI_TEAM);
     }
 
     private void showMyWiki() {
-        dispatch(Schema.APP_WIKI, Schema.WIKI_MINE);
+//        dispatch(Schema.APP_WIKI, Schema.WIKI_MINE);
+        dispatchAction(Schema.PMOS_ACTION_WIKI_MINE);
     }
 
     private void showIdVerify() {
-        dispatch(Schema.APP_PMOS, Schema.PMOS_ID);
+//        dispatch(Schema.APP_PMOS, Schema.PMOS_ID);
+        dispatchAction(Schema.PMOS_ACTION_IDREAD);
     }
 
     private void showPersonSearch() {
-        dispatch(Schema.APP_PMOS, Schema.PMOS_FACE);
+//        dispatch(Schema.APP_PMOS, Schema.PMOS_FACE);
+        dispatchAction(Schema.PMOS_ACTION_LIVEFACE);
     }
 }

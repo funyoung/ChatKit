@@ -2,13 +2,23 @@ package com.stfalcon.chatkit.sample.common.intent;
 
 import static com.stfalcon.chatkit.sample.common.intent.Schema.PMOS_ACTION_IDREAD;
 import static com.stfalcon.chatkit.sample.common.intent.Schema.PMOS_ACTION_LIVEFACE;
+import static com.stfalcon.chatkit.sample.common.intent.Schema.PMOS_ACTION_SERVICE_DOC_SUMMARY;
+import static com.stfalcon.chatkit.sample.common.intent.Schema.PMOS_ACTION_SERVICE_MORE;
+import static com.stfalcon.chatkit.sample.common.intent.Schema.PMOS_ACTION_SERVICE_OCR;
+import static com.stfalcon.chatkit.sample.common.intent.Schema.PMOS_ACTION_SERVICE_TRANSLATION;
+import static com.stfalcon.chatkit.sample.common.intent.Schema.PMOS_ACTION_SERVICE_TTS;
+import static com.stfalcon.chatkit.sample.common.intent.Schema.PMOS_ACTION_WIKI_LAW;
+import static com.stfalcon.chatkit.sample.common.intent.Schema.PMOS_ACTION_WIKI_MINE;
+import static com.stfalcon.chatkit.sample.common.intent.Schema.PMOS_ACTION_WIKI_TEAM;
 
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.widget.Toast;
 
+import com.stfalcon.chatkit.sample.features.home.HomeActivity;
 import com.stfalcon.chatkit.sample.features.main.MainActivity;
 import com.stfalcon.chatkit.sample.features.chat.ChatMessagesActivity;
 import com.stfalcon.chatkit.sample.features.wiki.MyWikiActivity;
@@ -144,6 +154,42 @@ public class IntentUtil {
             }
         }
         return result;
+    }
+
+
+    public static boolean handleIntentAction(Activity activity, String action) {
+        try {
+            if (PMOS_ACTION_WIKI_MINE.equalsIgnoreCase(action)) {
+                emitActivity(activity, MyWikiActivity.class);
+            } else if (PMOS_ACTION_WIKI_TEAM.equalsIgnoreCase(action)) {
+                emitActivity(activity, TeamWikiActivity.class);
+            } else if (PMOS_ACTION_WIKI_LAW.equalsIgnoreCase(action)) {
+                emitActivity(activity, PublicWikiActivity.class);
+            } else if (PMOS_ACTION_SERVICE_OCR.equalsIgnoreCase(action)) {
+                ChatMessagesActivity.openOcr(activity);
+            } else if (PMOS_ACTION_SERVICE_TTS.equalsIgnoreCase(action)) {
+                ChatMessagesActivity.openTts(activity);
+            } else if (PMOS_ACTION_SERVICE_TRANSLATION.equalsIgnoreCase(action)) {
+                // todo
+                Toast.makeText(activity, "翻译功能正在实现。", Toast.LENGTH_SHORT).show();
+            } else if (PMOS_ACTION_SERVICE_DOC_SUMMARY.equalsIgnoreCase(action)) {
+                // todo
+                Toast.makeText(activity, "文档摘要功能即将上线", Toast.LENGTH_SHORT).show();
+            } else if (PMOS_ACTION_SERVICE_MORE.equalsIgnoreCase(action)) {
+                Toast.makeText(activity, "更多工具即将上线", Toast.LENGTH_SHORT).show();
+                MainActivity.open(activity);
+            } else {
+                return false;
+            }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private static <T extends Activity> void emitActivity(Activity activity, Class<T> aClass) {
+        activity.startActivity(new Intent(activity, aClass));
     }
 
     private static String pmosPackage = "com.fri.sonicom.pmospluss";
