@@ -178,8 +178,8 @@ public class ChatSession {
         }
 
         // todo: 使用真实msg和chatId
-        String testMsg = "方芳被诈骗案情况"; // msg;
-        String testChatId = "d74002a42d4511f0b1990242ac170005"; // chatId;
+        String testMsg = msg; // "方芳被诈骗案情况"; // msg;
+        String testChatId = chatId; //"d74002a42d4511f0b1990242ac170005"; // chatId;
 
         ChatRequest request = AiHelper.getChatRequest(testMsg, true);
 
