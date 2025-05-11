@@ -17,6 +17,6 @@ public interface UploadService {
     @Multipart
     @POST("ai/api/ocr2/parse")
     Observable<ResponseBody> uploadFile(
-            @Part MultipartBody.Part filePart
+            @Part MultipartBody.Part file
     );
 }

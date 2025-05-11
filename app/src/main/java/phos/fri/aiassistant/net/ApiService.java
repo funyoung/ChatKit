@@ -11,6 +11,7 @@ import phos.fri.aiassistant.entity.ChatRequest;
 import phos.fri.aiassistant.entity.FuckNewChatData;
 import phos.fri.aiassistant.entity.NewChatRequest;
 import phos.fri.aiassistant.entity.NewChatData;
+import phos.fri.aiassistant.entity.OcrChatData;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
@@ -81,4 +82,6 @@ public interface ApiService {
 //    @POST("/ai/api/v1/chats_openai/{chatId}/chat/completions")
 //    Observable<ApiResponse<NewChatData>> chatCompletion(@Body CreateChatRequest request);
 
+    @POST("/ai/api/chat/completions")
+    Observable<ApiResponse<OcrChatData>> ocrSummary(@Body ChatRequest request);
 }

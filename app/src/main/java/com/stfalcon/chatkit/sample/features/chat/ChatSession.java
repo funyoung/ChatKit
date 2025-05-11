@@ -34,7 +34,7 @@ import phos.fri.aiassistant.entity.ChatListData;
 import phos.fri.aiassistant.entity.FuckNewChatData;
 import phos.fri.aiassistant.entity.NewChatData;
 import phos.fri.aiassistant.entity.NewChatRequest;
-import phos.fri.aiassistant.entity.OcrData;
+import phos.fri.aiassistant.entity.OcrChatData;
 import phos.fri.aiassistant.net.AiHelper;
 import phos.fri.aiassistant.net.ApiClient;
 import phos.fri.aiassistant.net.RxUtils;
@@ -130,7 +130,7 @@ public class ChatSession {
 
         if (null == chatId) {
             // todo:create chat
-            NewChatRequest requestBody = AiHelper.createChat(datasetId);
+            NewChatRequest requestBody = AiHelper.getNewChatRequest(datasetId);
             Log.i(TAG, "new chat request body: " + new Gson().toJson(requestBody));
 
             ApiClient.getService(Profile.token, userId).createChat(requestBody).subscribeOn(Schedulers.io())
@@ -182,11 +182,7 @@ public class ChatSession {
         String testMsg = "方芳被诈骗案情况"; // msg;
         String testChatId = "d74002a42d4511f0b1990242ac170005"; // chatId;
 
-        ChatRequest request = new ChatRequest(
-                "Qwen2.5-Coder-32B-Instruct",
-                Collections.singletonList(new ChatRequest.Message("user", testMsg)),
-                true
-        );
+        ChatRequest request = AiHelper.getChatRequest(testMsg, true);
 
         disposable = ApiClient.getService(Profile.token, userId).chatStream(testChatId, request)
                 .subscribeOn(Schedulers.io())
@@ -337,20 +333,20 @@ public class ChatSession {
     public void performOcr(String path) throws UnsupportedEncodingException {
         File file = new File(path);
         if (file.exists()) {
-            RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), file);
-            String filename = URLEncoder.encode(file.getName(), "UTF-8");;
-            MultipartBody.Part body = MultipartBody.Part.createFormData("image", filename, requestFile);
+//            RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), file);
+//            String filename = URLEncoder.encode(file.getName(), "UTF-8");;
+//            MultipartBody.Part body = MultipartBody.Part.createFormData("image", filename, requestFile);
             // 创建文件请求体
-//            RequestBody requestFile = RequestBody.create(
-//                    MediaType.parse("multipart/form-data"),
-//                    file
-//            );
-//
-//            MultipartBody.Part body = MultipartBody.Part.createFormData(
-//                    "file",
-//                    file.getName(),
-//                    requestFile
-//            );
+            RequestBody requestFile = RequestBody.create(
+                    MediaType.parse("multipart/form-data"),
+                    file
+            );
+
+            MultipartBody.Part body = MultipartBody.Part.createFormData(
+                    "file",
+                    file.getName(),
+                    requestFile
+            );
             UploadClient.getService(Profile.token, Profile.userId).uploadFile(body)
                     .subscribeOn(Schedulers.io())
 //                    .compose(RxUtils.handleResponse())          // 业务 code 过滤
@@ -363,6 +359,9 @@ public class ChatSession {
                         @Override
                         public void onNext(ResponseBody data) {
                             debugShow("", data);
+                            String prompt = "你是文档总结助手，请用户输入内容";
+                            String testContent = new Gson().toJson(data);
+                            performOcrSummary(prompt, testContent);
                         }
                         @Override
                         public void onError(Throwable e) {
@@ -377,6 +376,37 @@ public class ChatSession {
             listener.toast("文件不存在： " + path);
         }
     }
+
+    protected void performOcrSummary(String prompt, String content) {
+        content = "我公司于2023年9月开始应用无线通信服务网关系统，经过两月的使用，该系统安全、可靠，稳定性高。使用期间将集群通信资源统一接入公安移动信息网并对其统一管控，提供通信资源共享通道以及安全可信、统一标准的访问服务接口，支持集群通信专网和公安移动信息网之间语音业务互通，保证了网络融合通信业务的安全。现将该系统的使用体会报告如下";
+        ChatRequest chatRequest = AiHelper.getChatRequest(prompt, content, false);
+        ApiClient.getService(Profile.token, userId).ocrSummary(chatRequest)
+                .subscribeOn(Schedulers.io())
+                .compose(RxUtils.handleResponse())          // 业务 code 过滤
+                .compose(RxUtils.applySchedulers())         // 线程切换
+                .subscribe(new Observer<OcrChatData>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        // 显示 loading
+                    }
+                    @Override
+                    public void onNext(OcrChatData data) {
+                        // 更新 UI：data.getDataList()
+                        String msg = new Gson().toJson(data);
+                        listener.toast(msg);
+                        //Toast.makeText(ChatMessagesActivity.this, msg, Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onError(Throwable e) {
+                        handleApiError("loadChatList", e);
+                    }
+                    @Override
+                    public void onComplete() {
+                        // 隐藏 loading
+                    }
+                });
+    }
+
 
     private <T> void debugShow(String s, T data) {
         // 更新 UI：data.getDataList()
